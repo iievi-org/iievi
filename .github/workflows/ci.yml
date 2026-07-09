@@ -1,0 +1,82 @@
+# CI — runs on every PR to main. Any failure blocks the merge (enforce via
+# branch protection: require the "api" and "web" checks to pass).
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: api (ruff, mypy, pytest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Ruff lint
+        run: uv run ruff check .
+
+      - name: Ruff format check
+        run: uv run ruff format --check .
+
+      - name: Mypy type check
+        run: uv run mypy app
+
+      - name: Pytest with coverage
+        run: uv run pytest
+        env:
+          ENVIRONMENT: development
+          DATABASE_URL: postgresql+asyncpg://ci:ci@localhost:5432/ci
+          REDIS_URL: redis://localhost:6379/0
+          JWT_SECRET: ci-jwt-secret-0123456789abcdef0123456789abcdef
+          ENCRYPTION_MASTER_KEY: ci-master-key-0123456789abcdef0123456789abcdef
+          HEALTH_API_KEY: ci-health-key-0123456789
+          DOCS_KEY: ci-docs-key-0123456789abc
+
+  web:
+    name: web (tsc, eslint, tests, build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared packages
+        run: pnpm turbo run build --filter="./packages/*"
+
+      - name: Type check
+        run: pnpm turbo run typecheck
+
+      - name: ESLint
+        run: pnpm turbo run lint
+
+      - name: Component tests
+        run: pnpm turbo run test
+
+      - name: Build
+        run: pnpm turbo run build --filter=@iievi/web

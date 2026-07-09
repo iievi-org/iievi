@@ -1,0 +1,94 @@
+# Deploy — runs on push to main AFTER CI passes (workflow_run gate).
+# Order is deliberate: migrations BEFORE service restart, health verification
+# AFTER restart; a failed health check fails the workflow and alerts.
+#
+# Required repository secrets:
+#   DOPPLER_TOKEN        — Doppler service token for the production config
+#   VPS_HOST             — Hetzner VPS IP or hostname
+#   VPS_SSH_KEY          — private key for the deploy user
+#   API_BASE_URL         — e.g. https://api.iievi.example
+#   VERCEL_DEPLOY_HOOK   — Vercel deploy hook URL for the frontend
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    branches: [main]
+    types: [completed]
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Only deploy when CI succeeded on a push to main
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Verify Doppler production secrets are reachable
+        uses: dopplerhq/secrets-fetch-action@v1.2.0
+        id: doppler
+        with:
+          doppler-token: ${{ secrets.DOPPLER_TOKEN }}
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy — pull, migrate, restart (migrations BEFORE restart, always)
+        run: |
+          ssh -i ~/.ssh/deploy_key deploy@"${{ secrets.VPS_HOST }}" bash -s <<'DEPLOY'
+          set -euo pipefail
+          cd /srv/iievi
+
+          git fetch origin main
+          git reset --hard "${{ github.event.workflow_run.head_sha }}"
+
+          cd apps/api
+          uv sync --frozen
+
+          # 1. Migrations first — old code must tolerate the new schema
+          doppler run -- uv run alembic upgrade head
+
+          # 2. Record the release identity that /health/version reports
+          doppler secrets set GIT_COMMIT_SHA="${{ github.event.workflow_run.head_sha }}" \
+            DEPLOYED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)" --silent
+
+          # 3. Graceful restart of all four processes
+          sudo supervisorctl restart iievi:
+          DEPLOY
+
+      - name: Verify new version is live
+        run: |
+          EXPECTED="${{ github.event.workflow_run.head_sha }}"
+          for i in $(seq 1 12); do
+            sleep 5
+            LIVE=$(curl -fsS "${{ secrets.API_BASE_URL }}/health/version" | python3 -c 'import json,sys; print(json.load(sys.stdin)["commit"])' || echo "unreachable")
+            echo "attempt $i: live=$LIVE expected=$EXPECTED"
+            if [ "$LIVE" = "$EXPECTED" ]; then
+              echo "New version verified live."
+              exit 0
+            fi
+          done
+          echo "::error::Health check failed — deployed version never became live."
+          exit 1
+
+      - name: Trigger Vercel frontend deployment
+        run: curl -fsS -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}"
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          echo "::error::Production deployment FAILED for ${{ github.event.workflow_run.head_sha }} — investigate before re-deploying."
+          # A dedicated alerting channel (email/Slack webhook) is wired in a later
+          # phase; GitHub's built-in workflow-failure notifications fire now.

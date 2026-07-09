@@ -1,0 +1,10 @@
+# /etc/logrotate.d/iievi — daily rotation, 14-day retention, compressed.
+/var/log/iievi/*.log {
+    daily
+    rotate 14
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}

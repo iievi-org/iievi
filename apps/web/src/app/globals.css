@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * IIEVI Linen Design System — tokens ported from apps/marketing/src/styles.css.
+ * Single-mode editorial system. No dark mode by default. No gradients.
+ * Hierarchy via type, scale, whitespace, hairlines.
+ */
+
+:root {
+  --surface: #f1ede3;
+  --neutral: #f7f4ec;
+  --primary: #111111;
+  --secondary: #3a3733;
+  --tertiary: #8a857c;
+  --border: #1f1d1a;
+  --focus: #c8462c;
+}
+
+[data-theme="dark"] {
+  --surface: #14110d;
+  --neutral: #1c1815;
+  --primary: #f1ede3;
+  --secondary: #bfb8a8;
+  --tertiary: #7a7368;
+  --border: #2a2520;
+  --focus: #e0623f;
+}
+
+html {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html,
+  body {
+    background-color: var(--surface);
+    color: var(--secondary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: var(--surface);
+  }
+}
