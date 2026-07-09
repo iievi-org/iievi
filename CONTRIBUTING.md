@@ -6,7 +6,7 @@ Install these before anything else:
 
 | Tool | Version | Install (macOS) |
 |---|---|---|
-| Node.js | 20+ | `brew install node@20` |
+| Node.js | 22.13+ | `brew install node@22` |
 | pnpm | 9+ | `brew install pnpm` |
 | Python | 3.12 | `brew install python@3.12` |
 | uv | latest | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
