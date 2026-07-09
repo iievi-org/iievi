@@ -1,0 +1,223 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+/*
+ * IIEVI Linen Design System
+ * Single-mode editorial system. No dark mode. No gradients.
+ * Hierarchy via type, scale, whitespace, hairlines.
+ */
+
+@theme inline {
+  /* Colors — Linen palette */
+  --color-surface: var(--surface);
+  --color-neutral: var(--neutral);
+  --color-ink: var(--primary);
+  --color-graphite: var(--secondary);
+  --color-stone: var(--tertiary);
+  --color-hairline: var(--border);
+  --color-signal: var(--focus);
+
+  /* Aliases retained for shadcn primitives we may keep */
+  --color-background: var(--surface);
+  --color-foreground: var(--primary);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--primary);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--primary);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--surface);
+  --color-secondary: var(--neutral);
+  --color-secondary-foreground: var(--primary);
+  --color-muted: var(--neutral);
+  --color-muted-foreground: var(--tertiary);
+  --color-accent: var(--neutral);
+  --color-accent-foreground: var(--primary);
+  --color-destructive: var(--focus);
+  --color-destructive-foreground: var(--surface);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--focus);
+
+  /* Fonts */
+  --font-display: "Archivo Narrow", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: var(--font-body);
+
+  /* Type scale */
+  --text-display-xl: 120px;
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.01em;
+  --text-display-xl--font-weight: 700;
+
+  --text-display-lg: 88px;
+  --text-display-lg--line-height: 0.96;
+  --text-display-lg--letter-spacing: -0.005em;
+  --text-display-lg--font-weight: 700;
+
+  --text-headline-lg: 56px;
+  --text-headline-lg--line-height: 1;
+  --text-headline-lg--letter-spacing: 0em;
+  --text-headline-lg--font-weight: 700;
+
+  --text-headline-md: 28px;
+  --text-headline-md--line-height: 1.1;
+  --text-headline-md--font-weight: 600;
+
+  --text-headline-sm: 18px;
+  --text-headline-sm--line-height: 1.3;
+  --text-headline-sm--font-weight: 500;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.55;
+  --text-body-md--font-weight: 400;
+
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 1.55;
+  --text-body-sm--font-weight: 400;
+
+  --text-label-sm: 11px;
+  --text-label-sm--line-height: 1.2;
+  --text-label-sm--letter-spacing: 0.14em;
+  --text-label-sm--font-weight: 500;
+
+  --text-mono-sm: 11px;
+  --text-mono-sm--line-height: 1.3;
+  --text-mono-sm--letter-spacing: 0.04em;
+  --text-mono-sm--font-weight: 400;
+
+  --text-stat-numeral: 56px;
+  --text-stat-numeral--line-height: 1;
+  --text-stat-numeral--letter-spacing: -0.01em;
+  --text-stat-numeral--font-weight: 700;
+
+  --tracking-label: 0.14em;
+  --tracking-mono: 0.04em;
+
+  --radius: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+}
+
+:root {
+  --surface: #f1ede3;
+  --neutral: #f7f4ec;
+  --primary: #111111;
+  --secondary: #3a3733;
+  --tertiary: #8a857c;
+  --border: #1f1d1a;
+  --focus: #c8462c;
+}
+
+[data-theme="dark"] {
+  --surface: #14110d;
+  --neutral: #1c1815;
+  --primary: #f1ede3;
+  --secondary: #bfb8a8;
+  --tertiary: #7a7368;
+  --border: #2a2520;
+  --focus: #e0623f;
+}
+
+html {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    background-color: var(--surface);
+    color: var(--secondary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--secondary);
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: var(--surface);
+  }
+}
+
+/* Mobile type scale overrides */
+@media (max-width: 768px) {
+  :root {
+    --text-display-xl: 64px;
+    --text-display-lg: 52px;
+    --text-headline-lg: 36px;
+  }
+}
+
+/* Marquee animation */
+@keyframes linen-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.linen-marquee {
+  animation: linen-marquee 40s linear infinite;
+}
+
+.linen-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Playbook Mockup Animations */
+@keyframes linen-typewriter {
+  from { width: 0; border-right-color: var(--color-signal); }
+  to { width: 100%; border-right-color: transparent; }
+}
+
+@keyframes linen-blink {
+  50% { border-right-color: transparent; }
+}
+
+.animate-typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--color-signal);
+  animation: 
+    linen-typewriter 2s steps(40, end) forwards,
+    linen-blink .75s step-end infinite;
+}
+
+@keyframes linen-fill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.animate-fill {
+  animation: linen-fill 1.5s ease-out forwards;
+}
+
+/* Hide scrollbar for elements with .no-scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
