@@ -41,9 +41,7 @@ def test_health_deep_rejects_wrong_key(client: TestClient) -> None:
     assert response.status_code == 401
 
 
-def test_health_deep_reports_dependencies(
-    client: TestClient, monkeypatch: object
-) -> None:
+def test_health_deep_reports_dependencies(client: TestClient, monkeypatch: object) -> None:
     import pytest
 
     mp = monkeypatch
@@ -59,9 +57,7 @@ def test_health_deep_reports_dependencies(
     mp.setattr(health_module, "_check_redis", fake_ok)
     mp.setattr(health_module, "_check_celery", fake_down)
 
-    response = client.get(
-        "/health/deep", headers={"X-Health-Key": "test-health-key-0123456789"}
-    )
+    response = client.get("/health/deep", headers={"X-Health-Key": "test-health-key-0123456789"})
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "degraded"

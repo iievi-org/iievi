@@ -14,9 +14,11 @@ from typing import override
 
 from app.core.context import request_id_var, tenant_id_var
 
-_RESERVED_ATTRS = frozenset(
-    logging.LogRecord("", 0, "", 0, "", None, None).__dict__.keys()
-) | {"message", "asctime", "taskName"}
+_RESERVED_ATTRS = frozenset(logging.LogRecord("", 0, "", 0, "", None, None).__dict__.keys()) | {
+    "message",
+    "asctime",
+    "taskName",
+}
 
 
 class JsonFormatter(logging.Formatter):

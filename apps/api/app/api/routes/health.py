@@ -18,7 +18,7 @@ from pydantic import BaseModel
 from sqlalchemy import text
 
 from app.core.config import settings
-from app.db.engine import get_engine
+from app.db.base import get_engine
 from app.worker.celery_app import celery_app
 
 logger = logging.getLogger(__name__)
@@ -123,9 +123,7 @@ async def _check_celery() -> DependencyStatus:
     def _ping() -> int:
         # Explicit non-retrying connection: kombu's default retry policy would
         # block for minutes against a dead broker.
-        with celery_app.connection(
-            connect_timeout=2, transport_options={"max_retries": 1}
-        ) as conn:
+        with celery_app.connection(connect_timeout=2, transport_options={"max_retries": 1}) as conn:
             replies = celery_app.control.ping(timeout=2.0, connection=conn)
         return len(replies or [])
 
@@ -143,9 +141,7 @@ async def _bounded(check: Coroutine[None, None, DependencyStatus]) -> Dependency
     try:
         return await asyncio.wait_for(check, timeout=PER_CHECK_TIMEOUT_S)
     except TimeoutError:
-        return DependencyStatus(
-            healthy=False, detail=f"timeout after {PER_CHECK_TIMEOUT_S:.0f}s"
-        )
+        return DependencyStatus(healthy=False, detail=f"timeout after {PER_CHECK_TIMEOUT_S:.0f}s")
 
 
 @router.get(

@@ -44,8 +44,7 @@ def _scrub(value: object) -> object:
     """Recursively redact sensitive keys in dicts/lists of an event payload."""
     if isinstance(value, dict):
         return {
-            k: REDACTED if str(k).lower() in SENSITIVE_KEYS else _scrub(v)
-            for k, v in value.items()
+            k: REDACTED if str(k).lower() in SENSITIVE_KEYS else _scrub(v) for k, v in value.items()
         }
     if isinstance(value, list):
         return [_scrub(item) for item in value]
@@ -53,11 +52,23 @@ def _scrub(value: object) -> object:
 
 
 def scrub_event(event: Event, _hint: Hint) -> Event | None:
-    """before_send hook: never let credentials leave the server."""
+    """before_send hook: scrub credentials, then attach correlation context.
+
+    The request_id/tenant_id tags let a Sentry event be joined against Axiom
+    logs and Celery task records for the same request.
+    """
+    from app.core.context import request_id_var, tenant_id_var
+
     scrubbed = _scrub(dict(event))
-    if isinstance(scrubbed, dict):
-        return scrubbed  # type: ignore[return-value]  # structure preserved by _scrub
-    return None
+    if not isinstance(scrubbed, dict):
+        return None
+    tags = scrubbed.setdefault("tags", {})
+    if isinstance(tags, dict):
+        if request_id_var.get():
+            tags.setdefault("request_id", request_id_var.get())
+        if tenant_id_var.get():
+            tags.setdefault("tenant_id", tenant_id_var.get())
+    return scrubbed  # type: ignore[return-value]  # structure preserved by _scrub
 
 
 def init_sentry(dsn: str, environment: str, release: str) -> None:

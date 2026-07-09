@@ -74,6 +74,19 @@ tenant-scoped table must ship with its RLS policy in the same migration.
 
 Never create a `.env` file. `.gitignore` blocks `*.env*` globally.
 
+## Dependency updates (monthly, never auto-merged)
+
+1. `cd apps/api && uv lock --upgrade` and, at the root, `pnpm update -r`.
+2. Review the lockfile diffs and the changelogs of anything with a major bump.
+3. Run the full suite (`make test`, `make lint`, `make typecheck`).
+4. Open a `chore/dependency-bumps-YYYY-MM` PR. CI runs pip-audit, pnpm audit,
+   and Snyk on it. **Never** auto-merge dependency updates — a green build
+   does not prove a breaking behaviour change didn't land.
+
+Security scanning runs on every PR: pip-audit (PyPI Advisory DB, strict),
+`pnpm audit --audit-level high`, and Snyk (when `SNYK_TOKEN` is configured).
+Any known vulnerability blocks the merge.
+
 ## Branch and PR conventions
 
 - Branches: `feature/<slug>`, `fix/<slug>`, `chore/<slug>`

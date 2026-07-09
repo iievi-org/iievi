@@ -11,7 +11,9 @@ _TEST_ENV = {
     "DATABASE_URL": "postgresql+asyncpg://iievi:iievi@localhost:5432/iievi_test",
     "REDIS_URL": "redis://localhost:6379/1",
     "JWT_SECRET": "test-jwt-secret-0123456789abcdef0123456789abcdef",
-    "ENCRYPTION_MASTER_KEY": "test-master-key-0123456789abcdef0123456789abcdef",
+    "JWT_REFRESH_SECRET": "test-refresh-secret-0123456789abcdef0123456789abcdef",
+    # 64 hex chars = 32 bytes, deliberately fake
+    "CREDENTIAL_ENCRYPTION_KEY": "aa" * 32,
     "HEALTH_API_KEY": "test-health-key-0123456789",
     "DOCS_KEY": "test-docs-key-0123456789abc",
     "SENTRY_DSN": "",
