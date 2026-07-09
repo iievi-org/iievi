@@ -22,7 +22,18 @@ CSRF_COOKIE = "csrf_token"
 CSRF_HEADER = "X-CSRF-Token"
 
 _STATE_CHANGING = frozenset({"POST", "PUT", "PATCH", "DELETE"})
-_EXEMPT_PREFIXES = ("/api/v1/auth/", "/health", "/docs", "/redoc", "/openapi.json", "/webhooks")
+# onboarding + its analytics are pre-login (no CSRF cookie exists yet); the
+# onboarding session cookie is HttpOnly + SameSite=Lax and path-scoped.
+_EXEMPT_PREFIXES = (
+    "/api/v1/auth/",
+    "/api/v1/onboarding/",
+    "/api/v1/analytics/onboarding-event",
+    "/health",
+    "/docs",
+    "/redoc",
+    "/openapi.json",
+    "/webhooks",
+)
 
 
 def issue_csrf_token() -> str:

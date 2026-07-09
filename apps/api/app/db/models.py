@@ -300,6 +300,11 @@ class BrandKit(Base):
     id: Mapped[uuid.UUID] = _uuid_pk()
     tenant_id: Mapped[uuid.UUID] = _tenant_fk()
     logo_url: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+    # R2 object key — signed URLs are generated on demand, never stored
+    logo_r2_key: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    # Pre-computed by the compute_nanobanana_style_prompt Celery task
+    # [CANVA_NEXT_UPDATE] replaced by a Canva brand-kit reference when Canva lands
+    nanobanana_style_prompt: Mapped[str | None] = mapped_column(Text, nullable=True)
     colors: Mapped[dict[str, object]] = mapped_column(
         JSONB, default=dict, server_default=text("'{}'")
     )
@@ -592,6 +597,40 @@ class NotificationPreference(Base):
     )
     created_at: Mapped[datetime] = _created_at()
     updated_at: Mapped[datetime] = _updated_at()
+
+
+class OnboardingSession(Base):
+    """DB fallback for Redis-held onboarding sessions. NO RLS — onboarding
+    happens BEFORE a tenant account exists (session-token addressed)."""
+
+    __tablename__ = "onboarding_sessions"
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+    session_token: Mapped[str] = mapped_column(String(64), unique=True)
+    current_stage: Mapped[str] = mapped_column(String(32))
+    data: Mapped[dict[str, object]] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'")
+    )
+    tenant_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    created_at: Mapped[datetime] = _created_at()
+    updated_at: Mapped[datetime] = _updated_at()
+
+
+class OnboardingEvent(Base):
+    """Lightweight onboarding analytics (stage completions, drop-offs).
+    NO RLS — recorded before any tenant exists."""
+
+    __tablename__ = "onboarding_events"
+    __table_args__ = (Index("ix_onboarding_events_token", "session_token", "created_at"),)
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+    session_token: Mapped[str] = mapped_column(String(64))
+    stage: Mapped[str] = mapped_column(String(32))
+    event_type: Mapped[str] = mapped_column(String(48))
+    meta: Mapped[dict[str, object]] = mapped_column(
+        "metadata", JSONB, default=dict, server_default=text("'{}'")
+    )
+    created_at: Mapped[datetime] = _created_at()
 
 
 # Tables that get RLS policies in the apply_rls migration. Order matters for

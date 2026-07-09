@@ -26,6 +26,7 @@ dependencies = [
     "boto3>=1.43.45",
     "pillow>=12.3.0",
     "python-magic>=0.4.27",
+    "python-multipart>=0.0.32",
 ]
 
 [dependency-groups]
@@ -81,8 +82,8 @@ module = ["celery.*", "flower.*", "kombu.*", "passlib.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-# celery signal decorators are untyped; the handlers themselves stay typed
-module = "app.worker.celery_app"
+# celery signal/task decorators are untyped; the handlers themselves stay typed
+module = ["app.worker.celery_app", "app.worker.tasks"]
 disallow_untyped_decorators = false
 
 [tool.pytest.ini_options]
