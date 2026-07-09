@@ -13,8 +13,13 @@ def test_json_formatter_includes_required_fields() -> None:
     tenant_token = tenant_id_var.set("tenant-456")
     try:
         record = logging.LogRecord(
-            name="app.test", level=logging.INFO, pathname=__file__,
-            lineno=1, msg="hello %s", args=("world",), exc_info=None,
+            name="app.test",
+            level=logging.INFO,
+            pathname=__file__,
+            lineno=1,
+            msg="hello %s",
+            args=("world",),
+            exc_info=None,
         )
         entry = json.loads(JsonFormatter().format(record))
     finally:
@@ -31,8 +36,13 @@ def test_json_formatter_includes_required_fields() -> None:
 
 def test_json_formatter_merges_extra_fields() -> None:
     record = logging.LogRecord(
-        name="app.test", level=logging.WARNING, pathname=__file__,
-        lineno=1, msg="slow", args=None, exc_info=None,
+        name="app.test",
+        level=logging.WARNING,
+        pathname=__file__,
+        lineno=1,
+        msg="slow",
+        args=None,
+        exc_info=None,
     )
     record.duration_ms = 812.5
     entry = json.loads(JsonFormatter().format(record))

@@ -19,6 +19,26 @@ jobs:
     defaults:
       run:
         working-directory: apps/api
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: iievi
+          POSTGRES_PASSWORD: iievi
+          POSTGRES_DB: iievi
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U iievi -d iievi"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+asyncpg://iievi:iievi@localhost:5432/iievi
+      REDIS_URL: redis://localhost:6379/0
+      JWT_SECRET: ci-jwt-secret-0123456789abcdef0123456789abcdef
+      JWT_REFRESH_SECRET: ci-refresh-secret-0123456789abcdef0123456789abcdef
+      CREDENTIAL_ENCRYPTION_KEY: abababababababababababababababababababababababababababababababab
+      HEALTH_API_KEY: ci-health-key-0123456789
+      DOCS_KEY: ci-docs-key-0123456789abc
     steps:
       - uses: actions/checkout@v4
 
@@ -39,16 +59,22 @@ jobs:
       - name: Mypy type check
         run: uv run mypy app
 
-      - name: Pytest with coverage
+      - name: Bootstrap RLS roles (mirrors local podman init)
+        run: psql postgresql://iievi:iievi@localhost:5432/iievi -f ../../infra/db/init/01-rls.sql
+
+      - name: Apply migrations to fresh database
+        run: uv run alembic upgrade head
+
+      - name: Pytest with coverage (RLS isolation REQUIRED)
         run: uv run pytest
         env:
-          ENVIRONMENT: development
-          DATABASE_URL: postgresql+asyncpg://ci:ci@localhost:5432/ci
-          REDIS_URL: redis://localhost:6379/0
-          JWT_SECRET: ci-jwt-secret-0123456789abcdef0123456789abcdef
-          ENCRYPTION_MASTER_KEY: ci-master-key-0123456789abcdef0123456789abcdef
-          HEALTH_API_KEY: ci-health-key-0123456789
-          DOCS_KEY: ci-docs-key-0123456789abc
+          REQUIRE_RLS_TESTS: "1"
+          RLS_TEST_OWNER_URL: postgresql+asyncpg://iievi:iievi@localhost:5432/iievi
+          RLS_TEST_APP_URL: postgresql+asyncpg://iievi_app:iievi_app_dev_only@localhost:5432/iievi
+
+      - name: pip-audit (fail on known vulnerabilities)
+        run: uv run --with pip-audit pip-audit --strict --disable-pip -r <(uv export --frozen --no-emit-project --no-dev)
+        shell: bash
 
   web:
     name: web (tsc, eslint, tests, build)
@@ -80,3 +106,29 @@ jobs:
 
       - name: Build
         run: pnpm turbo run build --filter=@iievi/web
+
+      - name: pnpm audit (fail on high/critical)
+        run: pnpm audit --audit-level high
+
+  snyk:
+    name: snyk (dependency scan)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for SNYK_TOKEN
+        id: has-token
+        run: echo "present=${{ secrets.SNYK_TOKEN != '' }}" >> "$GITHUB_OUTPUT"
+
+      - name: Snyk scan
+        if: steps.has-token.outputs.present == 'true'
+        uses: snyk/actions/node@master
+        continue-on-error: false
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --all-projects --severity-threshold=high
+
+      - name: Skipped (no SNYK_TOKEN configured)
+        if: steps.has-token.outputs.present != 'true'
+        run: echo "SNYK_TOKEN not set — add it in repo secrets to enable Snyk scanning."

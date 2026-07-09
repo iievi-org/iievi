@@ -100,9 +100,7 @@ def create_app() -> FastAPI:
             contact=app.contact,
             routes=app.routes,
         )
-        schema.setdefault("components", {}).setdefault("securitySchemes", {})[
-            "BearerAuth"
-        ] = {
+        schema.setdefault("components", {}).setdefault("securitySchemes", {})["BearerAuth"] = {
             "type": "http",
             "scheme": "bearer",
             "bearerFormat": "JWT",

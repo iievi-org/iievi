@@ -51,7 +51,8 @@ services:
       DATABASE_URL: postgresql+asyncpg://iievi_app:iievi_app_dev_only@postgres:5432/iievi
       REDIS_URL: redis://redis:6379/0
       JWT_SECRET: ${JWT_SECRET}
-      ENCRYPTION_MASTER_KEY: ${ENCRYPTION_MASTER_KEY}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      CREDENTIAL_ENCRYPTION_KEY: ${CREDENTIAL_ENCRYPTION_KEY}
       HEALTH_API_KEY: ${HEALTH_API_KEY}
       DOCS_KEY: ${DOCS_KEY}
       SENTRY_DSN: ${SENTRY_DSN:-}
@@ -83,7 +84,8 @@ services:
       DATABASE_URL: postgresql+asyncpg://iievi_app:iievi_app_dev_only@postgres:5432/iievi
       REDIS_URL: redis://redis:6379/0
       JWT_SECRET: ${JWT_SECRET}
-      ENCRYPTION_MASTER_KEY: ${ENCRYPTION_MASTER_KEY}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      CREDENTIAL_ENCRYPTION_KEY: ${CREDENTIAL_ENCRYPTION_KEY}
       HEALTH_API_KEY: ${HEALTH_API_KEY}
       DOCS_KEY: ${DOCS_KEY}
       SENTRY_DSN: ${SENTRY_DSN:-}
@@ -107,7 +109,8 @@ services:
       DATABASE_URL: postgresql+asyncpg://iievi_app:iievi_app_dev_only@postgres:5432/iievi
       REDIS_URL: redis://redis:6379/0
       JWT_SECRET: ${JWT_SECRET}
-      ENCRYPTION_MASTER_KEY: ${ENCRYPTION_MASTER_KEY}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      CREDENTIAL_ENCRYPTION_KEY: ${CREDENTIAL_ENCRYPTION_KEY}
       HEALTH_API_KEY: ${HEALTH_API_KEY}
       DOCS_KEY: ${DOCS_KEY}
     volumes:
@@ -128,7 +131,8 @@ services:
       DATABASE_URL: postgresql+asyncpg://iievi_app:iievi_app_dev_only@postgres:5432/iievi
       REDIS_URL: redis://redis:6379/0
       JWT_SECRET: ${JWT_SECRET}
-      ENCRYPTION_MASTER_KEY: ${ENCRYPTION_MASTER_KEY}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      CREDENTIAL_ENCRYPTION_KEY: ${CREDENTIAL_ENCRYPTION_KEY}
       HEALTH_API_KEY: ${HEALTH_API_KEY}
       DOCS_KEY: ${DOCS_KEY}
     ports:

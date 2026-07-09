@@ -39,11 +39,18 @@ class Settings(BaseSettings):
 
     # --- Data stores ------------------------------------------------------
     database_url: PostgresDsn = Field(alias="DATABASE_URL")
+    # Neon PgBouncer URL for the app's pooled connections; falls back to
+    # DATABASE_URL locally where no PgBouncer exists.
+    database_url_pooled: PostgresDsn | None = Field(default=None, alias="DATABASE_URL_POOLED")
+    # Direct (non-pooled) URL for pg_dump backups and migrations on Neon.
+    database_url_direct: PostgresDsn | None = Field(default=None, alias="DATABASE_URL_DIRECT")
     redis_url: RedisDsn = Field(alias="REDIS_URL")
 
     # --- Auth & crypto ----------------------------------------------------
     jwt_secret: str = Field(alias="JWT_SECRET", min_length=32)
-    encryption_master_key: str = Field(alias="ENCRYPTION_MASTER_KEY", min_length=32)
+    jwt_refresh_secret: str = Field(alias="JWT_REFRESH_SECRET", min_length=32)
+    # 64 hex chars = 32 bytes; consumed exclusively by app/core/security.py
+    credential_encryption_key: str = Field(alias="CREDENTIAL_ENCRYPTION_KEY", min_length=64)
 
     # --- Operational keys -------------------------------------------------
     health_api_key: str = Field(alias="HEALTH_API_KEY", min_length=16)
@@ -68,6 +75,11 @@ class Settings(BaseSettings):
         return v
 
     @property
+    def pooled_database_url(self) -> str:
+        """Pooled URL for app sessions; plain URL when PgBouncer is absent (local)."""
+        return str(self.database_url_pooled or self.database_url)
+
+    @property
     def cors_origin_list(self) -> list[str]:
         """CORS_ORIGINS is a comma-separated string in Doppler."""
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
@@ -81,11 +93,10 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     """Return the singleton settings instance, exiting loudly on invalid config."""
     try:
-        return Settings()  # type: ignore[call-arg]  # fields come from the environment
+        return Settings()
     except ValidationError as exc:
         missing = [
-            ".".join(str(loc) for loc in err["loc"]) + f": {err['msg']}"
-            for err in exc.errors()
+            ".".join(str(loc) for loc in err["loc"]) + f": {err['msg']}" for err in exc.errors()
         ]
         sys.stderr.write(
             "FATAL: invalid or missing environment configuration.\n"

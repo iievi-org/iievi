@@ -21,9 +21,7 @@ logger = logging.getLogger(__name__)
 class RequestContextMiddleware(BaseHTTPMiddleware):
     """Thread request_id through context variables and log request completion."""
 
-    async def dispatch(
-        self, request: Request, call_next: RequestResponseEndpoint
-    ) -> Response:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
         token = request_id_var.set(request_id)
         started = time.perf_counter()

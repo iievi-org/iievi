@@ -1,27 +1,39 @@
-"""Alembic environment — async engine, URL from the environment (Doppler)."""
+"""Alembic environment — async engine, URL from the environment (Doppler).
+
+Migrations run as the database OWNER role (DATABASE_URL_OWNER when set,
+else DATABASE_URL): they create tables, RLS policies, and indexes. The
+application role (iievi_app) never runs DDL.
+"""
 
 import asyncio
+import logging
 import os
+import time
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
+
+from alembic import context
+
+# Import ALL models so autogenerate sees the complete schema.
+from app.db.models import Base
+
+logger = logging.getLogger("alembic.env")
 
 config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-database_url = os.environ.get("DATABASE_URL")
+database_url = os.environ.get("DATABASE_URL_OWNER") or os.environ.get("DATABASE_URL")
 if not database_url:
     msg = "DATABASE_URL is not set — run migrations via Doppler: make migrate"
     raise RuntimeError(msg)
 config.set_main_option("sqlalchemy.url", database_url)
 
-# Model metadata is attached in the schema phase (Instruction Prompt 2).
-target_metadata = None
+target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
@@ -37,9 +49,17 @@ def run_migrations_offline() -> None:
 
 
 def _run_sync_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        compare_type=True,
+        compare_server_default=True,
+    )
+    started = time.perf_counter()
+    logger.info("migration run starting")
     with context.begin_transaction():
         context.run_migrations()
+    logger.info("migration run finished in %.2fs", time.perf_counter() - started)
 
 
 async def run_migrations_online() -> None:

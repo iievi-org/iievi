@@ -21,7 +21,8 @@ doppler secrets set --project iievi --config dev \
   DATABASE_URL_OWNER='postgresql+asyncpg://iievi:iievi@localhost:5432/iievi' \
   REDIS_URL='redis://localhost:6379/0' \
   JWT_SECRET="$(openssl rand -hex 32)" \
-  ENCRYPTION_MASTER_KEY="$(openssl rand -hex 32)" \
+  JWT_REFRESH_SECRET="$(openssl rand -hex 32)" \
+  CREDENTIAL_ENCRYPTION_KEY="$(openssl rand -hex 32)" \
   HEALTH_API_KEY="$(openssl rand -hex 16)" \
   DOCS_KEY="$(openssl rand -hex 16)" \
   CORS_ORIGINS='http://localhost:3000' \
@@ -42,7 +43,7 @@ doppler secrets set --project iievi --config dev \
 
 Repeat for `--config stg` and `--config prd` with real values (generate
 DIFFERENT random keys per environment — never share JWT_SECRET or
-ENCRYPTION_MASTER_KEY across environments).
+CREDENTIAL_ENCRYPTION_KEY across environments).
 
 ## Wiring
 
@@ -58,7 +59,7 @@ ENCRYPTION_MASTER_KEY across environments).
 
 ## Rules
 
-- `ENCRYPTION_MASTER_KEY` (AES-256-GCM master key) lives ONLY in Doppler.
+- `CREDENTIAL_ENCRYPTION_KEY` (AES-256-GCM master key) lives ONLY in Doppler.
   Rotating it requires re-encrypting all stored credentials — see the security
   phase runbook before touching it.
 - Adding a variable: set it in all three configs, add the typed field to
