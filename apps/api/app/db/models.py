@@ -499,10 +499,9 @@ class AuditLog(Base):
     )
 
     id: Mapped[uuid.UUID] = _uuid_pk()
-    # Nullable: platform-level actions (e.g. feature flag change) have no tenant
-    tenant_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("tenants.id", ondelete="SET NULL"), nullable=True
-    )
+    # Bare UUID, deliberately NO foreign key: audit rows are immutable history
+    # (append-only trigger) — an FK ON DELETE action would need to UPDATE them.
+    tenant_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
     # Nullable: system actions (Celery tasks, webhooks) have no acting user
     actor_user_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
     actor_ip: Mapped[str | None] = mapped_column(INET, nullable=True)

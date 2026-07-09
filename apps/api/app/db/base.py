@@ -14,6 +14,7 @@ SLOW_QUERY_THRESHOLD_MS log a WARNING with the SQL and parameters.
 """
 
 import logging
+import os
 import time
 import uuid
 from collections.abc import AsyncIterator
@@ -28,6 +29,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 
@@ -38,14 +40,22 @@ SLOW_QUERY_THRESHOLD_MS = 500
 
 @lru_cache(maxsize=1)
 def get_engine() -> AsyncEngine:
-    """Process-wide async engine (created on first use, never at import)."""
-    engine = create_async_engine(
-        settings.pooled_database_url,
-        pool_size=10,
-        max_overflow=5,
-        pool_timeout=30,
-        pool_pre_ping=True,
-    )
+    """Process-wide async engine (created on first use, never at import).
+
+    Under pytest, pooling is disabled: TestClient portals and pytest-asyncio
+    run on different event loops, and a pooled asyncpg connection is bound to
+    the loop that created it. NullPool opens/closes per operation instead.
+    """
+    if "PYTEST_VERSION" in os.environ:
+        engine = create_async_engine(settings.pooled_database_url, poolclass=NullPool)
+    else:
+        engine = create_async_engine(
+            settings.pooled_database_url,
+            pool_size=10,
+            max_overflow=5,
+            pool_timeout=30,
+            pool_pre_ping=True,
+        )
     _install_slow_query_logging(engine)
     return engine
 

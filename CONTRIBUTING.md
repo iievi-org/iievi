@@ -64,6 +64,36 @@ make migrate                          # apply to your local database
 Rules: migrations run **before** service restarts in deployment; every
 tenant-scoped table must ship with its RLS policy in the same migration.
 
+### Zero-downtime migration checklist
+
+Migrations deploy BEFORE the new code restarts, so the OLD code must work
+against the NEW schema. Before creating any migration that touches existing
+columns, walk this checklist:
+
+**Always safe (single deploy):**
+- [ ] Adding a NULLABLE column (or one with a server default)
+- [ ] Adding a new table
+- [ ] Adding an index — but only with `CREATE INDEX CONCURRENTLY` inside
+      `op.get_context().autocommit_block()`
+
+**Never in a single deploy — requires the three-phase pattern:**
+dropping a column/table, renaming a column, changing a column type.
+
+1. **Phase 1 (expand):** add the new column; deploy code that WRITES to both
+   old and new but still READS the old.
+2. **Phase 2 (migrate):** backfill the new column; verify counts match;
+   deploy code that reads the new column.
+3. **Phase 3 (contract):** only after Phase 2 has been live and verified,
+   drop the old column in its own migration.
+
+Also check:
+- [ ] Does the migration take locks a live table can't afford?
+      (`ALTER TABLE ... SET NOT NULL` scans; adding a column with a volatile
+      default rewrites the table.)
+- [ ] Is `downgrade()` real, or is this migration forward-only? (Forward-only
+      is fine — say so in the docstring; production never runs `downgrade`.)
+- [ ] New tenant-scoped table → RLS policy in the SAME migration.
+
 ## Adding an environment variable
 
 1. Add it to Doppler in **all three configs** (`dev`, `stg`, `prd`):
