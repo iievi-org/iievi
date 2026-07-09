@@ -7,7 +7,7 @@ dependencies = [
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.32.0",
     "gunicorn>=23.0.0",
-    "pydantic>=2.9.0",
+    "pydantic[email]>=2.9.0",
     "pydantic-settings>=2.6.0",
     "sqlalchemy[asyncio]>=2.0.36",
     "asyncpg>=0.30.0",
@@ -20,6 +20,12 @@ dependencies = [
     "passlib[bcrypt]>=1.7.4",
     "bcrypt==4.0.1",
     "pyjwt>=2.13.0",
+    "bleach>=6.4.0",
+    "anthropic>=0.116.0",
+    "langfuse>=4.13.2",
+    "boto3>=1.43.45",
+    "pillow>=12.3.0",
+    "python-magic>=0.4.27",
 ]
 
 [dependency-groups]
@@ -31,6 +37,8 @@ dev = [
     "pytest-cov>=6.0.0",
     "flower>=2.0.1",
     "fakeredis>=2.36.2",
+    "types-bleach>=6.4.0.20260607",
+    "boto3-stubs>=1.43.45",
 ]
 
 [tool.ruff]

@@ -33,7 +33,7 @@ def test_health_version_reports_commit_and_timestamp(client: TestClient) -> None
 def test_health_deep_rejects_missing_key(client: TestClient) -> None:
     response = client.get("/health/deep")
     assert response.status_code == 401
-    assert response.json()["detail"]["code"] == "invalid_health_key"
+    assert response.json()["code"] == "invalid_health_key"
 
 
 def test_health_deep_rejects_wrong_key(client: TestClient) -> None:
