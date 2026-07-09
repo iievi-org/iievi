@@ -48,12 +48,32 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
+# Objects that exist ONLY in hand-written SQL migrations (CONCURRENTLY
+# indexes, expression indexes). Autogenerate must never try to drop them.
+_SQL_ONLY_NAMES = {
+    "ix_posts_scheduled_at_pending",
+    "ix_leads_tenant_last_inbound",
+    "ix_conversations_lead_created",
+    "ix_business_profiles_services_gin",
+    "uq_users_email_global",
+}
+
+
+def _include_object(
+    obj: object, name: str | None, type_: str, reflected: bool, compare_to: object
+) -> bool:
+    if type_ == "index" and name in _SQL_ONLY_NAMES:
+        return False
+    return True
+
+
 def _run_sync_migrations(connection: Connection) -> None:
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
         compare_type=True,
         compare_server_default=True,
+        include_object=_include_object,
     )
     started = time.perf_counter()
     logger.info("migration run starting")

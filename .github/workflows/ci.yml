@@ -48,6 +48,9 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Install system libraries (libmagic for MIME detection)
+        run: sudo apt-get update -q && sudo apt-get install -y -q libmagic1
+
       - name: Install dependencies
         run: uv sync --frozen
 

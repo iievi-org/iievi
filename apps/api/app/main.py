@@ -36,9 +36,13 @@ from app.core.middleware import RequestContextMiddleware
 from app.core.ratelimit import RateLimitMiddleware
 from app.core.security_headers import SecurityHeadersMiddleware
 from app.core.sentry import init_sentry
+from app.modules.analytics.router import router as analytics_router
 from app.modules.auth.router import router as auth_router
 from app.modules.billing.router import router as billing_router
+from app.modules.credentials.router import router as credentials_router
 from app.modules.flags.router import router as flags_router
+from app.modules.onboarding.router import router as onboarding_router
+from app.modules.profiles.router import router as profiles_router
 
 OPENAPI_DESCRIPTION = """
 IIEVI — one AI-powered chat interface for service businesses to run their
@@ -117,6 +121,10 @@ def create_app() -> FastAPI:
     v1.include_router(auth_router)
     v1.include_router(billing_router)
     v1.include_router(flags_router)
+    v1.include_router(onboarding_router)
+    v1.include_router(profiles_router)
+    v1.include_router(credentials_router)
+    v1.include_router(analytics_router)
     app.include_router(v1)
 
     def custom_openapi() -> dict[str, object]:

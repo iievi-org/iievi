@@ -56,6 +56,19 @@ class Settings(BaseSettings):
     health_api_key: str = Field(alias="HEALTH_API_KEY", min_length=16)
     docs_key: str = Field(alias="DOCS_KEY", min_length=16)
 
+    # --- Platform AI (onboarding extraction runs on the PLATFORM's key;
+    # customer-facing AI uses each tenant's own stored credential) ----------
+    anthropic_api_key: str = Field(default="", alias="ANTHROPIC_API_KEY")
+    langfuse_public_key: str = Field(default="", alias="LANGFUSE_PUBLIC_KEY")
+    langfuse_secret_key: str = Field(default="", alias="LANGFUSE_SECRET_KEY")
+    langfuse_host: str = Field(default="https://cloud.langfuse.com", alias="LANGFUSE_HOST")
+
+    # --- Cloudflare R2 (S3-compatible media storage) ------------------------
+    r2_account_id: str = Field(default="", alias="R2_ACCOUNT_ID")
+    r2_access_key_id: str = Field(default="", alias="R2_ACCESS_KEY_ID")
+    r2_secret_access_key: str = Field(default="", alias="R2_SECRET_ACCESS_KEY")
+    r2_bucket: str = Field(default="iievi-media", alias="R2_BUCKET")
+
     # --- Observability ----------------------------------------------------
     sentry_dsn: str = Field(default="", alias="SENTRY_DSN")
     axiom_token: str = Field(default="", alias="AXIOM_TOKEN")
