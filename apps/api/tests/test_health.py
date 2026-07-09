@@ -57,7 +57,9 @@ def test_health_deep_reports_dependencies(client: TestClient, monkeypatch: objec
     mp.setattr(health_module, "_check_redis", fake_ok)
     mp.setattr(health_module, "_check_celery", fake_down)
 
-    response = client.get("/health/deep", headers={"X-Health-Key": "test-health-key-0123456789"})
+    from app.core.config import settings
+
+    response = client.get("/health/deep", headers={"X-Health-Key": settings.health_api_key})
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "degraded"

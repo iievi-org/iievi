@@ -71,9 +71,9 @@ def test_malformed_key_raises_environment_error(monkeypatch: pytest.MonkeyPatch)
 
 
 def test_key_rotation_reencrypts() -> None:
-    old_key = "aa" * 32
+    old_key = security.settings.credential_encryption_key  # the ACTIVE key
     new_key = "bb" * 32
-    stored = encrypt_credential("rotate-me")  # test env key == old_key
+    stored = encrypt_credential("rotate-me")
     rotated = reencrypt_credential(stored, old_key, new_key)
     assert rotated != stored
     # decrypting the rotated value with the ACTIVE (old) key must fail
