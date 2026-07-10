@@ -41,10 +41,8 @@ async def _require_db(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = fakeredis.aioredis.FakeRedis(decode_responses=True)
     monkeypatch.setattr(security, "get_redis", lambda: fake)
     monkeypatch.setattr(ratelimit, "get_redis", lambda: fake)
-    from app.core import redis as core_redis
     from app.modules.onboarding import session_service
 
-    core_redis.get_redis.cache_clear()
     monkeypatch.setattr(session_service, "get_redis", lambda: fake)
 
     # Onboarding persistence + hooks enqueue Celery tasks; run tests brokerless
