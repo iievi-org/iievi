@@ -1,7 +1,7 @@
 """Onboarding state machine — 12 stages, one message per turn.
 
 Each stage defines: a question generator, a response processor (which may
-call the Claude extraction pipeline), and a completeness validator. A turn
+call the Gemini extraction pipeline), and a completeness validator. A turn
 either advances to the next stage, or returns a targeted clarification and
 stays put. The final CONFIRM_AND_CREATE stage requires an authenticated
 tenant and materialises the collected profile (done in the router, which has

@@ -41,8 +41,15 @@ from app.modules.auth.router import router as auth_router
 from app.modules.billing.router import router as billing_router
 from app.modules.credentials.router import router as credentials_router
 from app.modules.flags.router import router as flags_router
+from app.modules.leads.router import router as leads_router
 from app.modules.onboarding.router import router as onboarding_router
+from app.modules.posts.router import router as posts_router
 from app.modules.profiles.router import router as profiles_router
+from app.modules.realtime.router import router as realtime_router
+from app.modules.realtime.router import ws_router
+from app.modules.webhooks.admin_router import router as webhook_admin_router
+from app.modules.webhooks.billing_router import router as billing_webhooks_router
+from app.modules.webhooks.meta_router import router as meta_webhooks_router
 
 OPENAPI_DESCRIPTION = """
 IIEVI — one AI-powered chat interface for service businesses to run their
@@ -97,6 +104,27 @@ def create_app() -> FastAPI:
     app.add_middleware(RequestContextMiddleware)
     # Sentry's ASGI middleware wraps everything via its FastAPI integration.
 
+    if not settings.is_production:
+        import time
+
+        @app.middleware("http")
+        async def flag_slow_handlers(
+            request: Request,
+            call_next: Callable[[Request], Awaitable[Response]],
+        ) -> Response:
+            """Development-only: log every route's execution time, flag >1s."""
+            started = time.perf_counter()
+            response = await call_next(request)
+            elapsed_ms = (time.perf_counter() - started) * 1000
+            if elapsed_ms > 1000:
+                import logging
+
+                logging.getLogger("app.performance").warning(
+                    "slow route handler",
+                    extra={"path": request.url.path, "duration_ms": round(elapsed_ms, 1)},
+                )
+            return response
+
     if settings.is_production:
 
         @app.middleware("http")
@@ -125,7 +153,14 @@ def create_app() -> FastAPI:
     v1.include_router(profiles_router)
     v1.include_router(credentials_router)
     v1.include_router(analytics_router)
+    v1.include_router(posts_router)
+    v1.include_router(leads_router)
+    v1.include_router(realtime_router)  # /auth/ws-token
+    v1.include_router(meta_webhooks_router)
+    v1.include_router(billing_webhooks_router)
+    v1.include_router(webhook_admin_router)
     app.include_router(v1)
+    app.include_router(ws_router)  # /ws/{tenant_id} — unversioned WebSocket
 
     def custom_openapi() -> dict[str, object]:
         if app.openapi_schema:

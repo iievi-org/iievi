@@ -33,11 +33,14 @@ def persist_onboarding_session(token: str, stage: str, answers: dict[str, object
         async with AsyncSession(engine) as session:
             await session.execute(
                 text(
-                    "INSERT INTO onboarding_sessions (session_token, current_stage, data) "
-                    "VALUES (:token, :stage, cast(:data AS jsonb)) "
+                    # expires_at mirrors the 24h Redis TTL (+24h grace for the
+                    # daily cleanup sweep) — see onboarding.cleanup_expired_sessions
+                    "INSERT INTO onboarding_sessions "
+                    "(session_token, current_stage, data, expires_at) "
+                    "VALUES (:token, :stage, cast(:data AS jsonb), now() + interval '48 hours') "
                     "ON CONFLICT (session_token) DO UPDATE SET "
                     "current_stage = EXCLUDED.current_stage, data = EXCLUDED.data, "
-                    "updated_at = now()"
+                    "expires_at = now() + interval '48 hours', updated_at = now()"
                 ),
                 {
                     "token": token,

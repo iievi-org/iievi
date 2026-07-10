@@ -96,6 +96,20 @@ class WebhookSignatureError(IIEVIException):
     code = "webhook_signature_invalid"
 
 
+class CircuitOpenError(IIEVIException):
+    """An external service's circuit breaker is open — fail fast, retry later."""
+
+    status_code = 503
+    code = "circuit_open"
+
+
+class WhatsAppSessionExpiredError(IIEVIException):
+    """The 24-hour WhatsApp session window is closed; a template must re-open it."""
+
+    status_code = 400
+    code = "whatsapp_session_expired"
+
+
 def _error_response(
     status_code: int, code: str, message: str, details: dict[str, object]
 ) -> JSONResponse:

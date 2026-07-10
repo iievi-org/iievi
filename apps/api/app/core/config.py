@@ -58,10 +58,19 @@ class Settings(BaseSettings):
 
     # --- Platform AI (onboarding extraction runs on the PLATFORM's key;
     # customer-facing AI uses each tenant's own stored credential) ----------
-    anthropic_api_key: str = Field(default="", alias="ANTHROPIC_API_KEY")
+    gemini_api_key: str = Field(default="", alias="GEMINI_API_KEY")
     langfuse_public_key: str = Field(default="", alias="LANGFUSE_PUBLIC_KEY")
     langfuse_secret_key: str = Field(default="", alias="LANGFUSE_SECRET_KEY")
     langfuse_host: str = Field(default="https://cloud.langfuse.com", alias="LANGFUSE_HOST")
+    # Per-tenant daily AI spend ceiling (USD) — exceeded → warn + notify ops
+    ai_daily_budget_usd: float = Field(default=5.0, alias="AI_DAILY_BUDGET_USD")
+
+    # --- Webhook signing secrets -------------------------------------------
+    meta_app_secret: str = Field(default="", alias="META_APP_SECRET")
+    # Echoed back in Meta's GET subscription-verify handshake
+    meta_webhook_verify_token: str = Field(default="", alias="META_WEBHOOK_VERIFY_TOKEN")
+    razorpay_webhook_secret: str = Field(default="", alias="RAZORPAY_WEBHOOK_SECRET")
+    stripe_webhook_secret: str = Field(default="", alias="STRIPE_WEBHOOK_SECRET")
 
     # --- Cloudflare R2 (S3-compatible media storage) ------------------------
     r2_account_id: str = Field(default="", alias="R2_ACCOUNT_ID")

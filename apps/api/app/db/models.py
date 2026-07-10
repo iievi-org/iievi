@@ -327,7 +327,7 @@ class ApiCredential(Base):
 
     id: Mapped[uuid.UUID] = _uuid_pk()
     tenant_id: Mapped[uuid.UUID] = _tenant_fk()
-    service: Mapped[str] = mapped_column(String(64))  # anthropic | nanobanana | meta | ...
+    service: Mapped[str] = mapped_column(String(64))  # gemini | nanobanana | meta | ...
     # AES-256-GCM, format base64(iv):base64(ciphertext+tag) — see core/security.py
     encrypted_key: Mapped[str] = mapped_column(Text)
     meta: Mapped[dict[str, object]] = mapped_column(
@@ -382,6 +382,8 @@ class Lead(Base):
     email: Mapped[str | None] = mapped_column(String(320), nullable=True)
     # Drives the WhatsApp 24-hour messaging window check
     last_inbound_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    # True = a human has taken over; the AI must not reply to this lead
+    manual_mode: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))
     meta: Mapped[dict[str, object]] = mapped_column(
         "metadata", JSONB, default=dict, server_default=text("'{}'")
     )
@@ -440,6 +442,14 @@ class Post(Base):
         JSONB, default=dict, server_default=text("'{}'")
     )
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Generation artifacts: topic, caption, hashtags, call_to_action,
+    # image_description, template_style, image R2 key — written by the
+    # post generation Celery chain.
+    meta: Mapped[dict[str, object]] = mapped_column(
+        "metadata", JSONB, default=dict, server_default=text("'{}'")
+    )
+    # Set once by the ad creation task; its presence makes ad creation idempotent
+    ad_campaign_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     created_at: Mapped[datetime] = _created_at()
     updated_at: Mapped[datetime] = _updated_at()
 
@@ -572,6 +582,10 @@ class WebhookEvent(Base):
         default=IdempotencyStatus.PENDING,
         server_default=IdempotencyStatus.PENDING.value,
     )
+    # Raw event payload — what the admin replay endpoint re-enqueues
+    payload: Mapped[dict[str, object]] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'")
+    )
     processed_at: Mapped[datetime | None] = mapped_column(nullable=True)
     received_at: Mapped[datetime] = _created_at()
 
@@ -612,6 +626,8 @@ class OnboardingSession(Base):
         JSONB, default=dict, server_default=text("'{}'")
     )
     tenant_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    # Cleanup boundary for the daily expired-session sweep
+    expires_at: Mapped[datetime | None] = mapped_column(nullable=True)
     created_at: Mapped[datetime] = _created_at()
     updated_at: Mapped[datetime] = _updated_at()
 
@@ -630,6 +646,32 @@ class OnboardingEvent(Base):
     meta: Mapped[dict[str, object]] = mapped_column(
         "metadata", JSONB, default=dict, server_default=text("'{}'")
     )
+    created_at: Mapped[datetime] = _created_at()
+
+
+class FailedTask(Base):
+    """Operational record of a Celery task that exhausted its retries.
+
+    NO RLS — this is the platform team's investigation table; rows exist for
+    tasks with no tenant context at all (beat jobs, webhook fan-out).
+    """
+
+    __tablename__ = "failed_tasks"
+    __table_args__ = (Index("ix_failed_tasks_created", "created_at"),)
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+    task_id: Mapped[str] = mapped_column(String(155), index=True)
+    task_name: Mapped[str] = mapped_column(String(255))
+    queue: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    # Bare UUID, no FK: failure records must survive tenant deletion
+    tenant_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    args: Mapped[dict[str, object]] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'")
+    )
+    error: Mapped[str] = mapped_column(Text)
+    retries: Mapped[int] = mapped_column(Integer, default=0, server_default=text("0"))
+    # True once the task has been parked on the dead letter queue
+    is_dlq: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))
     created_at: Mapped[datetime] = _created_at()
 
 

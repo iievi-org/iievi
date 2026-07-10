@@ -29,7 +29,7 @@ VERIFY_TIMEOUT_S = 10.0
 
 # Required fields per service — validation happens before any network call.
 REQUIRED_FIELDS: dict[str, tuple[str, ...]] = {
-    "anthropic": ("api_key",),
+    "gemini": ("api_key",),
     "nanobanana": ("api_key",),
     "meta": ("access_token", "page_id"),
     "instagram": ("access_token", "business_account_id"),
@@ -54,14 +54,14 @@ class DecryptedCredential:
         )
 
 
-async def _verify_anthropic(fields: dict[str, str], client: httpx.AsyncClient) -> None:
+async def _verify_gemini(fields: dict[str, str], client: httpx.AsyncClient) -> None:
     response = await client.get(
-        "https://api.anthropic.com/v1/models",
-        headers={"x-api-key": fields["api_key"], "anthropic-version": "2023-06-01"},
+        "https://generativelanguage.googleapis.com/v1beta/models",
+        headers={"x-goog-api-key": fields["api_key"]},
     )
-    if response.status_code in (401, 403):
+    if response.status_code in (400, 401, 403):
         raise CredentialVerificationError(
-            "Anthropic rejected this API key", details={"provider_status": response.status_code}
+            "Gemini rejected this API key", details={"provider_status": response.status_code}
         )
     response.raise_for_status()
 
@@ -118,7 +118,7 @@ async def _verify_instagram(fields: dict[str, str], client: httpx.AsyncClient) -
 # linkedin/tiktok verifiers land with their publishing phases; shape
 # validation still applies to them via REQUIRED_FIELDS.
 _VERIFIERS = {
-    "anthropic": _verify_anthropic,
+    "gemini": _verify_gemini,
     "nanobanana": _verify_nanobanana,
     "meta": _verify_meta,
     "instagram": _verify_instagram,

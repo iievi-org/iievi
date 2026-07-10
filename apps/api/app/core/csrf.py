@@ -33,6 +33,8 @@ _EXEMPT_PREFIXES = (
     "/redoc",
     "/openapi.json",
     "/webhooks",
+    # Platform webhooks are authenticated by HMAC signature, not cookies
+    "/api/v1/webhooks/",
 )
 
 

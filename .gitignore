@@ -38,3 +38,6 @@ htmlcov/
 logs/
 
 # Alembic — keep migrations, ignore nothing here on purpose
+
+# Celery beat local schedule state
+celerybeat-schedule*
