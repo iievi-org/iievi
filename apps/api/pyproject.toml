@@ -94,6 +94,9 @@ disallow_untyped_decorators = false
 asyncio_mode = "auto"
 testpaths = ["tests"]
 addopts = "--cov=app --cov-report=term-missing"
+markers = [
+    "hallucination: real-provider grounding invariants (needs GEMINI_API_KEY; CI-gated)",
+]
 
 [tool.coverage.run]
 omit = ["tests/*"]
