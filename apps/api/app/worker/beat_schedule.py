@@ -43,6 +43,12 @@ BEAT_SCHEDULE: dict[str, dict[str, object]] = {
         "schedule": crontab(minute=0, hour=4, day_of_week="mon"),
         "options": {"queue": "usage_tracking"},
     },
+    # Weekly owner performance report — Monday 9:00am IST == 03:30 UTC.
+    "reports-weekly-performance": {
+        "task": "reports.generate_weekly_performance",
+        "schedule": crontab(minute=30, hour=3, day_of_week="mon"),
+        "options": {"queue": "usage_tracking"},
+    },
     "channels-sync-tiktok-comments": {
         "task": "channels.sync_tiktok_comments",
         "schedule": crontab(minute=15),  # hourly at :15

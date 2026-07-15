@@ -33,7 +33,7 @@ from celery.signals import before_task_publish, task_failure, task_postrun, task
 from kombu import Queue
 
 from app.core.config import settings
-from app.core.context import request_id_var
+from app.core.context import request_id_var, task_id_var, task_name_var, tenant_id_var
 from app.core.ops import notify_ops
 from app.core.redis import get_sync_redis
 
@@ -73,6 +73,10 @@ celery_app = Celery(
         "app.worker.publish_worker",
         "app.worker.message_worker",
         "app.worker.billing_worker",
+        "app.worker.ai_worker",
+        "app.worker.outreach_worker",
+        "app.worker.notification_worker",
+        "app.worker.reports_worker",
     ],
 )
 
@@ -100,6 +104,10 @@ celery_app.conf.update(
     result_expires=3600,
     timezone="UTC",
     broker_connection_retry_on_startup=True,
+    # Capture stray stdout/stderr (and any leftover print) into the JSON logger
+    # so nothing bypasses the structured log pipeline that feeds Axiom.
+    worker_redirect_stdouts=True,
+    worker_redirect_stdouts_level="WARNING",
     beat_schedule=_beat_schedule(),
 )
 
@@ -120,18 +128,33 @@ def _propagate_request_id(headers: dict[str, object] | None = None, **_kwargs: o
 
 
 @task_prerun.connect
-def _restore_request_id(task: Task | None = None, **_kwargs: object) -> None:
-    """Worker side: restore the correlation id so all task logs carry it."""
-    if task is None:
-        return
-    request_id = getattr(task.request, "iievi_request_id", None)
-    if isinstance(request_id, str):
-        request_id_var.set(request_id)
+def _restore_request_id(
+    task: Task | None = None,
+    task_id: str | None = None,
+    args: tuple[object, ...] | None = None,
+    kwargs: dict[str, object] | None = None,
+    **_kwargs: object,
+) -> None:
+    """Worker side: restore correlation + task identifiers so every task log
+    line carries request_id, tenant_id, task_name, and task_id (Prompt 7 Step 11)."""
+    if task is not None:
+        request_id = getattr(task.request, "iievi_request_id", None)
+        if isinstance(request_id, str):
+            request_id_var.set(request_id)
+        task_name_var.set(task.name)
+    if task_id:
+        task_id_var.set(str(task_id))
+    tenant = _extract_tenant_id(args, kwargs)
+    if tenant:
+        tenant_id_var.set(tenant)
 
 
 @task_postrun.connect
 def _clear_request_id(**_kwargs: object) -> None:
     request_id_var.set(None)
+    tenant_id_var.set(None)
+    task_name_var.set(None)
+    task_id_var.set(None)
 
 
 # ---------------------------------------------------------------------------
@@ -143,12 +166,17 @@ def _clear_request_id(**_kwargs: object) -> None:
 
 
 def _extract_tenant_id(args: tuple[object, ...] | None, kwargs: dict[str, object] | None) -> str:
-    """Best-effort tenant extraction — our task convention passes tenant_id
-    as the first positional arg or a `tenant_id` kwarg."""
+    """Best-effort tenant extraction — our tasks pass tenant_id either as a
+    `tenant_id` kwarg, a first positional UUID string, or a key inside a first
+    positional payload dict (the conversation/outreach/notification tasks)."""
     if kwargs and isinstance(kwargs.get("tenant_id"), str):
         return str(kwargs["tenant_id"])
-    if args and isinstance(args[0], str) and len(args[0]) == 36:
-        return args[0]
+    if args:
+        first = args[0]
+        if isinstance(first, str) and len(first) == 36:
+            return first
+        if isinstance(first, dict) and isinstance(first.get("tenant_id"), str):
+            return str(first["tenant_id"])
     return ""
 
 

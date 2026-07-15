@@ -218,7 +218,7 @@ def process_incoming_message(payload: dict[str, str]) -> None:
                 )
             elif not needs_review and intent is not None and intent.intent == "enquiry":
                 # 6. AI replies only to confident enquiries
-                generate_ai_response.delay({"tenant_id": str(tenant_id), "lead_id": str(lead_id)})
+                _enqueue_ai_response(str(tenant_id), str(lead_id))
             else:
                 _notify_owner(
                     str(tenant_id),
@@ -240,14 +240,15 @@ async def _finish_event(session: Any, payload: dict[str, str]) -> None:  # noqa:
         await mark_event_processed(session, uuid.UUID(event_id))
 
 
-@celery_app.task(name="messages.generate_ai_response", queue="ai_conversations", ignore_result=True)
-def generate_ai_response(payload: dict[str, str]) -> None:
-    """Stub: the grounded conversation engine lands with the outreach phase
-    (Prompt 7). The queue routing and enqueue contract are already final."""
-    logger.info(
-        "ai response requested",
-        extra={"tenant_id": payload.get("tenant_id"), "lead_id": payload.get("lead_id")},
-    )
+def _enqueue_ai_response(tenant_id: str, lead_id: str) -> None:
+    """Enqueue the grounded conversation engine (app.worker.ai_worker).
+
+    Lazy import keeps message_worker importable even if the AI stack changes,
+    and preserves the finalised enqueue contract ({tenant_id, lead_id} on the
+    ai_conversations queue)."""
+    from app.worker.ai_worker import generate_ai_response
+
+    generate_ai_response.delay({"tenant_id": tenant_id, "lead_id": lead_id})
 
 
 @celery_app.task(
@@ -325,7 +326,7 @@ def process_facebook_comment(payload: dict[str, str]) -> None:
                     extra={"comment_id": payload["comment_id"], "tenant_id": str(tenant_id)},
                 )
             else:
-                generate_ai_response.delay({"tenant_id": str(tenant_id), "lead_id": str(lead_id)})
+                _enqueue_ai_response(str(tenant_id), str(lead_id))
             _notify_owner(str(tenant_id), "new_lead", {"lead_id": str(lead_id)})
             await _finish_event(session, payload)
 
