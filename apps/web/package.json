@@ -11,19 +11,30 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
+    "@hookform/resolvers": "^5.4.0",
     "@iievi/api-client": "workspace:*",
     "@iievi/constants": "workspace:*",
     "@iievi/types": "workspace:*",
     "@iievi/validators": "workspace:*",
     "@sentry/nextjs": "^8.40.0",
     "@tanstack/react-query": "^5.62.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.42.2",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.575.0",
     "next": "^14.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.81.0",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.6.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20.16.0",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
@@ -36,6 +47,7 @@
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.0",
     "vite": "^5.4.21",
-    "vitest": "^2.1.0"
+    "vitest": "^2.1.0",
+    "vitest-axe": "^0.1.0"
   }
 }

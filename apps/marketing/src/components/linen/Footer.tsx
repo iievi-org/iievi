@@ -44,11 +44,18 @@ export function Footer() {
               {t("IIEVI")}
             </Link>
             <p className="mt-4 text-body-sm text-graphite max-w-xs">
-              {t("AI business automation for Global service businesses. One chat handles every task — leads, bookings, follow-ups, and reviews.")}
+              {t(
+                "AI business automation for Global service businesses. One chat handles every task — leads, bookings, follow-ups, and reviews.",
+              )}
             </p>
             <div className="mt-6 flex items-center gap-4 text-stone">
               {[Twitter, Linkedin, Instagram, Youtube].map((Icon, i) => (
-                <a key={i} href="#" aria-label="Social" className="hover:text-ink transition-colors">
+                <a
+                  key={i}
+                  href="#"
+                  aria-label="Social"
+                  className="hover:text-ink transition-colors"
+                >
                   <Icon size={18} strokeWidth={1.5} />
                 </a>
               ))}
@@ -56,7 +63,9 @@ export function Footer() {
           </div>
           {cols.map((c) => (
             <div key={c.label} className="md:col-span-3">
-              <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone mb-5">{c.label}</p>
+              <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone mb-5">
+                {c.label}
+              </p>
               <ul className="space-y-3">
                 {c.links.map((l) => (
                   <li key={l.to}>

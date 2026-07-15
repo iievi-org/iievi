@@ -12,7 +12,11 @@ import { CTASection } from "@/components/linen/CTASection";
 import { PlaybookMockup } from "@/components/linen/PlaybookMockup";
 import { PlaybookProgress } from "@/components/linen/PlaybookProgress";
 import { ButtonLink } from "@/components/linen/Button";
-import { getCategoryData, SOLUTION_CATEGORIES, type PlaybookStep } from "@/lib/solutionPlaybookData";
+import {
+  getCategoryData,
+  SOLUTION_CATEGORIES,
+  type PlaybookStep,
+} from "@/lib/solutionPlaybookData";
 
 export const Route = createFileRoute("/_marketing/solutions/$category")({
   head: ({ params }) => {
@@ -44,6 +48,8 @@ function PlaybookPage() {
   const { category } = Route.useParams();
   const data = getCategoryData(category);
   const { t } = useTranslation();
+  // Scroll tracking state — declared before the early return to satisfy rules-of-hooks.
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   if (!data) {
     return (
@@ -59,9 +65,6 @@ function PlaybookPage() {
   }
 
   const others = Object.entries(SOLUTION_CATEGORIES).filter(([k]) => k !== category);
-
-  // Scroll tracking state
-  const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   return (
     <>
@@ -92,17 +95,16 @@ function PlaybookPage() {
           </div>
 
           <div className="flex flex-col lg:flex-row items-start relative pb-24">
-            
             {/* Left Column: Scrolling Steps */}
             <div className="w-full lg:w-[40%] lg:pr-12">
               {/* The steps content */}
               <div className="space-y-[30vh]">
                 {data.playbook.map((step, index) => (
-                  <StepBlock 
-                    key={step.stepNumber} 
-                    step={step} 
-                    index={index} 
-                    onInView={() => setActiveStepIndex(index)} 
+                  <StepBlock
+                    key={step.stepNumber}
+                    step={step}
+                    index={index}
+                    onInView={() => setActiveStepIndex(index)}
                   />
                 ))}
               </div>
@@ -110,7 +112,10 @@ function PlaybookPage() {
 
             {/* Right Column: Sticky Mockup */}
             <div className="hidden lg:block w-[60%] sticky top-0 h-screen py-24 pl-8 border-l border-hairline">
-              <PlaybookMockup mockup={data.playbook[activeStepIndex].mockup} key={activeStepIndex} />
+              <PlaybookMockup
+                mockup={data.playbook[activeStepIndex].mockup}
+                key={activeStepIndex}
+              />
             </div>
 
             {/* Mobile Mockup Fallback (shown inline below each step on mobile) */}
@@ -128,10 +133,14 @@ function PlaybookPage() {
             <FadeIn>
               <SectionLabel>{t("See the Entire Workflow in Action")}</SectionLabel>
               <h2 className="mt-6 font-display text-headline-lg text-ink">
-                {t("Watch how IIEVI can turn social engagement into qualified bookings automatically.")}
+                {t(
+                  "Watch how IIEVI can turn social engagement into qualified bookings automatically.",
+                )}
               </h2>
               <div className="mt-8">
-                <ButtonLink to="/demo" variant="primary">{t("Try It Live")}</ButtonLink>
+                <ButtonLink to="/demo" variant="primary">
+                  {t("Try It Live")}
+                </ButtonLink>
               </div>
             </FadeIn>
           </div>
@@ -140,7 +149,10 @@ function PlaybookPage() {
               <Card variant="open" className="border-signal border-2 bg-surface">
                 <div className="space-y-6">
                   {data.finalStats.map((stat, i) => (
-                    <div key={stat.label} className="flex justify-between items-end border-b border-hairline/40 pb-4 last:border-0 last:pb-0">
+                    <div
+                      key={stat.label}
+                      className="flex justify-between items-end border-b border-hairline/40 pb-4 last:border-0 last:pb-0"
+                    >
                       <span className="text-body-md font-mono text-stone">{t(stat.label)}</span>
                       <Counter end={stat.value} delay={i * 0.2} />
                     </div>
@@ -156,17 +168,27 @@ function PlaybookPage() {
 
       {/* Other Categories */}
       <Section>
-        <FadeIn><SectionLabel>{t("Also Built For")}</SectionLabel></FadeIn>
+        <FadeIn>
+          <SectionLabel>{t("Also Built For")}</SectionLabel>
+        </FadeIn>
         <FadeIn delay={0.05}>
-          <h2 className="mt-6 font-display text-headline-lg text-ink">{t("Explore other categories.")}</h2>
+          <h2 className="mt-6 font-display text-headline-lg text-ink">
+            {t("Explore other categories.")}
+          </h2>
         </FadeIn>
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {others.map(([k, c], i) => (
             <FadeIn key={k} delay={i * 0.05}>
-              <Link to="/solutions/$category" params={{ category: k }} className="block h-full group">
+              <Link
+                to="/solutions/$category"
+                params={{ category: k }}
+                className="block h-full group"
+              >
                 <Card className="h-full group-hover:bg-neutral transition-colors flex flex-col">
                   <Pill>{t(c.label)}</Pill>
-                  <p className="mt-6 text-body-sm text-graphite line-clamp-3 flex-1">{t(c.intro)}</p>
+                  <p className="mt-6 text-body-sm text-graphite line-clamp-3 flex-1">
+                    {t(c.intro)}
+                  </p>
                   <p className="mt-6 font-body text-body-sm text-ink border-b border-hairline inline-block pb-0.5 self-start">
                     {t("See playbook")} →
                   </p>
@@ -182,7 +204,15 @@ function PlaybookPage() {
   );
 }
 
-function StepBlock({ step, index, onInView }: { step: PlaybookStep; index: number; onInView: () => void }) {
+function StepBlock({
+  step,
+  index,
+  onInView,
+}: {
+  step: PlaybookStep;
+  index: number;
+  onInView: () => void;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
   const { t } = useTranslation();
@@ -194,22 +224,28 @@ function StepBlock({ step, index, onInView }: { step: PlaybookStep; index: numbe
   }, [inView, onInView]);
 
   return (
-    <div ref={ref} className="relative transition-opacity duration-300" style={{ opacity: inView ? 1 : 0.4 }}>
+    <div
+      ref={ref}
+      className="relative transition-opacity duration-300"
+      style={{ opacity: inView ? 1 : 0.4 }}
+    >
       <div className="lg:hidden mb-4">
         <span className="text-display-xl font-display text-neutral/50 absolute -top-12 -left-4 pointer-events-none select-none z-[-1]">
           {step.stepNumber}
         </span>
       </div>
-      <SectionLabel className="mb-4">{step.stepNumber} — {t(step.heading)}</SectionLabel>
+      <SectionLabel className="mb-4">
+        {step.stepNumber} — {t(step.heading)}
+      </SectionLabel>
       <h3 className="font-display text-headline-md text-ink mb-4">{t(step.heading)}</h3>
       <p className="text-body-md text-graphite mb-8">{t(step.description)}</p>
-      
+
       <div className="bg-neutral p-6 border border-hairline mb-8 lg:mb-0">
         <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone mb-4">
           {t(step.highlightsLabel)}
         </p>
         <ul className="space-y-3">
-          {step.highlights.map(h => (
+          {step.highlights.map((h) => (
             <li key={h} className="flex items-start gap-3 text-body-sm text-ink">
               <span className="w-1.5 h-1.5 mt-2 bg-signal shrink-0" />
               <span>{t(h)}</span>
@@ -227,17 +263,17 @@ function StepBlock({ step, index, onInView }: { step: PlaybookStep; index: numbe
 }
 
 // Simple counter component for the final stats
-function Counter({ end, delay }: { end: number, delay: number }) {
+function Counter({ end, delay }: { end: number; delay: number }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
 
   useEffect(() => {
     if (!inView) return;
-    let start = 0;
+    const start = 0;
     const duration = 2000; // ms
     const startTime = performance.now() + delay * 1000;
-    
+
     let raf: number;
     const animate = (time: number) => {
       if (time < startTime) {
@@ -257,7 +293,10 @@ function Counter({ end, delay }: { end: number, delay: number }) {
   }, [end, inView, delay]);
 
   return (
-    <span ref={ref} className="text-[32px] md:text-[40px] font-display text-ink tabular-nums leading-none">
+    <span
+      ref={ref}
+      className="text-[32px] md:text-[40px] font-display text-ink tabular-nums leading-none"
+    >
       {count.toLocaleString()}
     </span>
   );

@@ -16,20 +16,20 @@ export function PlaybookProgress({ steps, activeStepIndex }: PlaybookProgressPro
     if (containerRef.current && activeItemRef.current) {
       const container = containerRef.current;
       const activeItem = activeItemRef.current;
-      
+
       const containerWidth = container.offsetWidth;
       const itemOffset = activeItem.offsetLeft;
       const itemWidth = activeItem.offsetWidth;
-      
+
       container.scrollTo({
-        left: itemOffset - (containerWidth / 2) + (itemWidth / 2),
-        behavior: "smooth"
+        left: itemOffset - containerWidth / 2 + itemWidth / 2,
+        behavior: "smooth",
       });
     }
   }, [activeStepIndex]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="flex flex-row items-center w-full overflow-x-auto no-scrollbar py-2"
     >
@@ -37,30 +37,32 @@ export function PlaybookProgress({ steps, activeStepIndex }: PlaybookProgressPro
         const isActive = index === activeStepIndex;
         const isPast = index < activeStepIndex;
         const isLast = index === steps.length - 1;
-        
+
         return (
-          <div 
-            key={step.stepNumber} 
+          <div
+            key={step.stepNumber}
             ref={isActive ? activeItemRef : null}
-            className={`flex flex-row items-center group shrink-0 ${isLast ? '' : 'pr-4 xl:pr-8'}`}
+            className={`flex flex-row items-center group shrink-0 ${isLast ? "" : "pr-4 xl:pr-8"}`}
           >
             {/* Timeline Node */}
-            <div 
+            <div
               className={`w-8 h-8 rounded-full flex items-center justify-center border text-mono-sm font-mono transition-colors duration-300 shrink-0
-                ${isActive ? "bg-signal border-signal text-surface" : 
-                  isPast ? "bg-ink border-ink text-surface" : 
-                  "bg-transparent border-hairline text-stone"}`}
+                ${
+                  isActive
+                    ? "bg-signal border-signal text-surface"
+                    : isPast
+                      ? "bg-ink border-ink text-surface"
+                      : "bg-transparent border-hairline text-stone"
+                }`}
             >
               {step.stepNumber}
             </div>
 
             {/* Title */}
             <div className="mx-3 whitespace-nowrap">
-              <p 
+              <p
                 className={`font-mono text-mono-sm uppercase tracking-[0.14em] transition-colors duration-300
-                  ${isActive ? "text-signal" : 
-                    isPast ? "text-ink" : 
-                    "text-stone"}`}
+                  ${isActive ? "text-signal" : isPast ? "text-ink" : "text-stone"}`}
               >
                 {t(step.heading)}
               </p>
@@ -68,9 +70,9 @@ export function PlaybookProgress({ steps, activeStepIndex }: PlaybookProgressPro
 
             {/* Connector Line */}
             {!isLast && (
-              <div 
+              <div
                 className={`h-px w-12 xl:w-24 transition-colors duration-300 shrink-0
-                  ${isPast ? "bg-ink" : "bg-hairline/40"}`} 
+                  ${isPast ? "bg-ink" : "bg-hairline/40"}`}
               />
             )}
           </div>

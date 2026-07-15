@@ -16,9 +16,16 @@ export const Route = createFileRoute("/_marketing/pricing")({
   head: () => ({
     meta: [
       { title: "Pricing — IIEVI | Plans for Global Service Businesses" },
-      { name: "description", content: "Transparent INR pricing. Start free, scale as you grow. No setup fees, no hidden costs." },
+      {
+        name: "description",
+        content:
+          "Transparent INR pricing. Start free, scale as you grow. No setup fees, no hidden costs.",
+      },
       { property: "og:title", content: "Pricing — IIEVI" },
-      { property: "og:description", content: "Three plans built for Global service businesses of every size." },
+      {
+        property: "og:description",
+        content: "Three plans built for Global service businesses of every size.",
+      },
     ],
   }),
   component: PricingPage,
@@ -96,14 +103,37 @@ const compareRows = [
   ["Support", "Email", "Phone + chat", "24/7 dedicated"],
 ];
 
-
 const faqs = [
-  { question: "Is there really a free trial?", answer: "Yes — 14 days, full Growth plan features, no credit card required. You'll only need to add billing at the end of the trial if you want to keep going." },
-  { question: "Can I change plans later?", answer: "Anytime. Upgrades take effect immediately; downgrades happen at the next billing cycle. Annual plans pro-rate any upgrade." },
-  { question: "What does an 'AI reply' count as?", answer: "One outgoing message from IIEVI to a customer. Status messages, reminders, and review requests don't count toward your limit." },
-  { question: "Do you support GST invoicing?", answer: "Yes — all invoices are GST-compliant. Enter your GSTIN in billing settings and we'll generate proper credit and tax invoices." },
-  { question: "What happens if I exceed my plan?", answer: "We never cut off your customers. You'll get a notification at 80% and we'll charge a small per-message overage at the end of the month — or you can upgrade." },
-  { question: "Is my customer data secure?", answer: "Yes. We're ISO 27001 certified, hosted in India, and fully DPDP-compliant. We never train models on your conversations." },
+  {
+    question: "Is there really a free trial?",
+    answer:
+      "Yes — 14 days, full Growth plan features, no credit card required. You'll only need to add billing at the end of the trial if you want to keep going.",
+  },
+  {
+    question: "Can I change plans later?",
+    answer:
+      "Anytime. Upgrades take effect immediately; downgrades happen at the next billing cycle. Annual plans pro-rate any upgrade.",
+  },
+  {
+    question: "What does an 'AI reply' count as?",
+    answer:
+      "One outgoing message from IIEVI to a customer. Status messages, reminders, and review requests don't count toward your limit.",
+  },
+  {
+    question: "Do you support GST invoicing?",
+    answer:
+      "Yes — all invoices are GST-compliant. Enter your GSTIN in billing settings and we'll generate proper credit and tax invoices.",
+  },
+  {
+    question: "What happens if I exceed my plan?",
+    answer:
+      "We never cut off your customers. You'll get a notification at 80% and we'll charge a small per-message overage at the end of the month — or you can upgrade.",
+  },
+  {
+    question: "Is my customer data secure?",
+    answer:
+      "Yes. We're ISO 27001 certified, hosted in India, and fully DPDP-compliant. We never train models on your conversations.",
+  },
 ];
 
 function PricingPage() {
@@ -114,7 +144,9 @@ function PricingPage() {
     <>
       <Container>
         <div className="pt-16 md:pt-24 pb-12 text-center max-w-3xl mx-auto">
-          <FadeIn><SectionLabel>{t("Pricing")}</SectionLabel></FadeIn>
+          <FadeIn>
+            <SectionLabel>{t("Pricing")}</SectionLabel>
+          </FadeIn>
           <FadeIn delay={0.05}>
             <h1 className="mt-6 font-display text-[44px] md:text-display-lg text-ink leading-[0.96]">
               {t("Plans that pay for themselves.")}
@@ -122,25 +154,31 @@ function PricingPage() {
           </FadeIn>
           <FadeIn delay={0.1}>
             <p className="mt-6 text-body-md text-graphite">
-              {t("Average IIEVI customer recovers ₹1.38L in missed bookings within 30 days. All plans in INR. No setup fees. Cancel anytime.")}
+              {t(
+                "Average IIEVI customer recovers ₹1.38L in missed bookings within 30 days. All plans in INR. No setup fees. Cancel anytime.",
+              )}
             </p>
           </FadeIn>
           <FadeIn delay={0.15}>
             <div className="mt-10 inline-flex items-center gap-2 border border-hairline p-1">
               <button
                 onClick={() => setYearly(false)}
-                className={`px-5 py-2 font-body text-label-sm uppercase tracking-[0.14em] cursor-pointer transition-colors ${!yearly ? "bg-ink text-surface" : "text-graphite"
-                  }`}
+                className={`px-5 py-2 font-body text-label-sm uppercase tracking-[0.14em] cursor-pointer transition-colors ${
+                  !yearly ? "bg-ink text-surface" : "text-graphite"
+                }`}
               >
                 {t("Monthly")}
               </button>
               <button
                 onClick={() => setYearly(true)}
-                className={`px-5 py-2 font-body text-label-sm uppercase tracking-[0.14em] cursor-pointer transition-colors flex items-center gap-2 ${yearly ? "bg-ink text-surface" : "text-graphite"
-                  }`}
+                className={`px-5 py-2 font-body text-label-sm uppercase tracking-[0.14em] cursor-pointer transition-colors flex items-center gap-2 ${
+                  yearly ? "bg-ink text-surface" : "text-graphite"
+                }`}
               >
                 {t("Yearly")}
-                <Pill variant="signal" className="!px-2 !py-0.5 !text-[10px]">{t("Save 20%")}</Pill>
+                <Pill variant="signal" className="!px-2 !py-0.5 !text-[10px]">
+                  {t("Save 20%")}
+                </Pill>
               </button>
             </div>
           </FadeIn>
@@ -163,11 +201,14 @@ function PricingPage() {
                   <span className="font-display text-display-lg text-ink">
                     ₹{(yearly ? p.yearly : p.monthly).toLocaleString("en-IN")}
                   </span>
-                  <span className="font-mono text-mono-sm text-stone uppercase tracking-[0.04em]">/month</span>
+                  <span className="font-mono text-mono-sm text-stone uppercase tracking-[0.04em]">
+                    /month
+                  </span>
                 </div>
                 {yearly && (
                   <p className="font-mono text-mono-sm text-stone mt-2">
-                    {t("Billed ₹")}{(p.yearly * 12).toLocaleString("en-IN")} {t("yearly")}
+                    {t("Billed ₹")}
+                    {(p.yearly * 12).toLocaleString("en-IN")} {t("yearly")}
                   </p>
                 )}
                 <ul className="mt-8 space-y-3 flex-1">
@@ -200,7 +241,9 @@ function PricingPage() {
       <Rule />
 
       <Section>
-        <FadeIn><SectionLabel>{t("Full Comparison")}</SectionLabel></FadeIn>
+        <FadeIn>
+          <SectionLabel>{t("Full Comparison")}</SectionLabel>
+        </FadeIn>
         <FadeIn delay={0.05}>
           <h2 className="mt-6 font-display text-headline-lg text-ink">
             {t("Every feature, every plan.")}
@@ -210,9 +253,16 @@ function PricingPage() {
           <table className="w-full min-w-[640px] border-t border-hairline">
             <thead>
               <tr className="bg-neutral">
-                <th className="text-left font-mono text-mono-sm uppercase tracking-[0.14em] text-stone px-4 py-4">{t("Feature")}</th>
+                <th className="text-left font-mono text-mono-sm uppercase tracking-[0.14em] text-stone px-4 py-4">
+                  {t("Feature")}
+                </th>
                 {plans.map((p) => (
-                  <th key={p.name} className="text-left font-mono text-mono-sm uppercase tracking-[0.14em] text-stone px-4 py-4">{p.name}</th>
+                  <th
+                    key={p.name}
+                    className="text-left font-mono text-mono-sm uppercase tracking-[0.14em] text-stone px-4 py-4"
+                  >
+                    {p.name}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -221,7 +271,9 @@ function PricingPage() {
                 <tr key={row[0]} className="border-b border-hairline">
                   <td className="font-body text-body-sm text-ink px-4 py-4">{row[0]}</td>
                   {row.slice(1).map((c, i) => (
-                    <td key={i} className="font-mono text-mono-sm text-graphite px-4 py-4">{c}</td>
+                    <td key={i} className="font-mono text-mono-sm text-graphite px-4 py-4">
+                      {c}
+                    </td>
                   ))}
                 </tr>
               ))}
@@ -233,7 +285,9 @@ function PricingPage() {
       <Rule />
 
       <Section>
-        <FadeIn><SectionLabel>{t("Pricing FAQ")}</SectionLabel></FadeIn>
+        <FadeIn>
+          <SectionLabel>{t("Pricing FAQ")}</SectionLabel>
+        </FadeIn>
         <FadeIn delay={0.05}>
           <h2 className="mt-6 font-display text-headline-lg text-ink max-w-3xl">
             {t("Questions before you start.")}
