@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { MobileTabBar } from "@/components/dashboard/MobileTabBar";
 import { DashboardErrorBoundary } from "@/components/errors/ErrorBoundaries";
 import { UpdateBanner } from "@/components/realtime/UpdateBanner";
 import { AuthProvider } from "@/lib/auth-context";
@@ -14,10 +15,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <UpdateBanner />
         <div className="flex min-h-screen">
           <DashboardSidebar />
-          <main className="min-w-0 flex-1">
+          <main className="min-w-0 flex-1 pb-16 md:pb-0">
             <DashboardErrorBoundary>{children}</DashboardErrorBoundary>
           </main>
         </div>
+        <MobileTabBar />
       </WebSocketProvider>
     </AuthProvider>
   );

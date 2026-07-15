@@ -1,10 +1,28 @@
+import { MessageSquare } from "lucide-react";
+
+import { ComingSoon } from "@/components/dashboard/ComingSoon";
+import { ButtonLink } from "@/components/linen";
+
 export default function ChatPage() {
   return (
-    <div className="p-8">
-      <h1 className="font-display text-headline-md text-ink">Chat</h1>
-      <p className="mt-2 font-body text-body-md text-graphite">
-        Your unified conversation workspace lands in a later phase.
-      </p>
-    </div>
+    <ComingSoon
+      icon={MessageSquare}
+      eyebrow="Chat"
+      title="One chat to run everything"
+      description="The unified command chat — where you generate posts, launch campaigns, and manage leads just by typing — is arriving next."
+      bullets={[
+        "Generate & schedule posts from a message",
+        "Draft and launch ad campaigns",
+        "Ask for analytics in plain language",
+      ]}
+      note="Backend chat endpoint in progress."
+    >
+      <ButtonLink href="/dashboard/leads" variant="ghost">
+        Go to Leads
+      </ButtonLink>
+      <ButtonLink href="/dashboard/posts" variant="ghost">
+        Create a post
+      </ButtonLink>
+    </ComingSoon>
   );
 }

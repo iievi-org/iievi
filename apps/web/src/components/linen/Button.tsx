@@ -1,5 +1,12 @@
+import type { Route } from "next";
 import Link from "next/link";
-import { type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ComponentProps, forwardRef } from "react";
+import {
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  forwardRef,
+  type MouseEventHandler,
+  type ReactNode,
+} from "react";
 
 export type ButtonVariant = "primary" | "ghost" | "ghost-inverse";
 
@@ -23,15 +30,37 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-// `ComponentProps<typeof Link>` (not `LinkProps`) — with experimental.typedRoutes,
-// LinkProps becomes generic; this captures the typed href + anchor props cleanly.
-type ButtonLinkProps = ComponentProps<typeof Link> & {
+// experimental.typedRoutes makes next/link's own prop types morph depending on
+// whether .next/types has been generated (it's absent during CI's typecheck step,
+// which runs before the web build), and Link's special handler typing clashes with
+// exactOptionalPropertyTypes when anchor attrs are spread. An explicit prop set that
+// covers real usages keeps route type-safety without either fragility.
+interface ButtonLinkProps {
+  href: Route;
   variant?: ButtonVariant;
-};
+  className?: string;
+  children?: ReactNode;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
+  target?: string;
+  rel?: string;
+  "aria-label"?: string;
+}
 
-export function ButtonLink({ variant = "primary", className = "", children, ...rest }: ButtonLinkProps) {
+export function ButtonLink({
+  variant = "primary",
+  className = "",
+  href,
+  children,
+  onClick,
+  ...rest
+}: ButtonLinkProps) {
   return (
-    <Link className={`${base} ${variants[variant]} ${className}`} {...rest}>
+    <Link
+      href={href}
+      className={`${base} ${variants[variant]} ${className}`}
+      {...(onClick ? { onClick } : {})}
+      {...rest}
+    >
       {children}
     </Link>
   );
