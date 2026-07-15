@@ -50,6 +50,11 @@ async def _require_db(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = fakeredis.aioredis.FakeRedis(decode_responses=True)
     monkeypatch.setattr(security, "get_redis", lambda: fake)
     monkeypatch.setattr(ratelimit, "get_redis", lambda: fake)
+    # The shared aioredis client is lru_cached and bound to the event loop
+    # that created it; every test gets a fresh TestClient loop, so reset it.
+    from app.core import redis as core_redis
+
+    core_redis.get_redis.cache_clear()
     # get_redis caches per event loop (see app/core/redis.py) — fresh
     # TestClient loops get fresh clients automatically, no reset needed.
 
