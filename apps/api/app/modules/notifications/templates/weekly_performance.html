@@ -1,0 +1,28 @@
+{% extends "_base.html" %}
+{% block content %}
+<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#8a857c; margin:0 0 10px;">Your week in review</p>
+<h1 style="font-family:Georgia,'Times New Roman',serif; font-size:26px; line-height:1.25; color:#111111; font-weight:normal; margin:0 0 20px;">You got {{ leads_received }} leads last week</h1>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px; border-top:1px solid #1f1d1a;">
+  <tr>
+    <td style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:15px; color:#3a3733;">Leads received</td>
+    <td align="right" style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:22px; color:#111111;">{{ leads_received }}</td>
+  </tr>
+  <tr>
+    <td style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:15px; color:#3a3733;">AI conversation rate</td>
+    <td align="right" style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:22px; color:#111111;">{{ ai_conversation_rate }}%</td>
+  </tr>
+  <tr>
+    <td style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:15px; color:#3a3733;">Posts published</td>
+    <td align="right" style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:22px; color:#111111;">{{ posts_published }}</td>
+  </tr>
+  <tr>
+    <td style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:15px; color:#3a3733;">Ad spend</td>
+    <td align="right" style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:22px; color:#111111;">{{ ad_spend }}</td>
+  </tr>
+  <tr>
+    <td style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:15px; color:#3a3733;">Bookings closed</td>
+    <td align="right" style="padding:14px 0; border-bottom:1px solid #1f1d1a; font-family:Georgia,'Times New Roman',serif; font-size:22px; color:#111111;">{{ bookings_closed }}</td>
+  </tr>
+</table>
+<p style="margin:0;"><a href="{{ dashboard_url }}" style="display:inline-block; padding:13px 22px; background:#111111; color:#f7f4ec; text-decoration:none; font-family:Arial,Helvetica,sans-serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;">See the full breakdown</a></p>
+{% endblock %}

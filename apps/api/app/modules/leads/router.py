@@ -277,7 +277,7 @@ async def resume_ai(
     lead.meta = meta
     await session.flush()
 
-    from app.worker.message_worker import generate_ai_response
+    from app.worker.ai_worker import generate_ai_response
 
     generate_ai_response.delay({"tenant_id": str(user.tenant_id), "lead_id": str(lead_id)})
     return _lead_dict(lead)

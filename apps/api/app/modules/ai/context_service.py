@@ -49,6 +49,11 @@ class TenantAIContext(BaseModel):
     target_audience: dict[str, object] = Field(default_factory=dict)
     brand_colors: dict[str, object] = Field(default_factory=dict)
     image_style_prompt: str | None = None
+    # Prompt 7: profile-sourced facts the grounded conversation AI may surface.
+    # Absence is meaningful — the prompt forbids inventing any of these.
+    booking_url: str | None = None
+    contact_phone: str | None = None
+    contact_email: str | None = None
 
 
 async def assemble_tenant_context(tenant_id: uuid.UUID, session: AsyncSession) -> TenantAIContext:
@@ -88,6 +93,9 @@ async def assemble_tenant_context(tenant_id: uuid.UUID, session: AsyncSession) -
         target_audience=(marketing.target_audience or {}) if marketing else {},
         brand_colors=(kit.colors or {}) if kit else {},
         image_style_prompt=kit.nanobanana_style_prompt if kit else None,
+        booking_url=profile.booking_url,
+        contact_phone=profile.contact_phone,
+        contact_email=profile.contact_email,
     )
 
     await redis.set(_cache_key(tenant_id), context.model_dump_json(), ex=CONTEXT_CACHE_TTL_S)
