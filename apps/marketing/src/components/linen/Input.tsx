@@ -12,7 +12,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={`flex flex-col gap-1 ${fieldClassName}`}>
         {label && (
-          <label htmlFor={fieldId} className="font-body text-label-sm uppercase tracking-[0.14em] text-stone">
+          <label
+            htmlFor={fieldId}
+            className="font-body text-label-sm uppercase tracking-[0.14em] text-stone"
+          >
             {label}
           </label>
         )}

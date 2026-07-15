@@ -153,11 +153,7 @@ const petWellness: CategoryData = {
       description:
         "Connect your business in minutes. Answer a few questions about your business goals, services, and target audience. Our AI automatically configures the optimal content and lead-generation workflow for your industry.",
       highlightsLabel: "Highlights",
-      highlights: [
-        "2-minute setup",
-        "No technical expertise required",
-        "AI-guided configuration",
-      ],
+      highlights: ["2-minute setup", "No technical expertise required", "AI-guided configuration"],
       mockup: {
         type: "onboarding",
         data: {
@@ -174,20 +170,12 @@ const petWellness: CategoryData = {
       description:
         "Build your digital business identity. The AI learns your products, services, brand voice, locations, and customer segments to generate highly relevant content and conversations.",
       highlightsLabel: "What AI learns",
-      highlights: [
-        "Brand tone & personality",
-        "Full product catalogue",
-        "Customer demographics",
-      ],
+      highlights: ["Brand tone & personality", "Full product catalogue", "Customer demographics"],
       mockup: {
         type: "business-profile",
         data: {
           brandVoice: "Friendly & Educational",
-          products: [
-            "Herbal Pet Shampoo",
-            "Tick Protection Spray",
-            "Digestive Support",
-          ],
+          products: ["Herbal Pet Shampoo", "Tick Protection Spray", "Digestive Support"],
           targetAudience: "Pet Parents",
           profileComplete: 82,
         },
@@ -233,11 +221,7 @@ const petWellness: CategoryData = {
       description:
         "Generate high-performing content automatically. The system creates posts, captions, hashtags, creatives, and engagement hooks specifically designed for your industry.",
       highlightsLabel: "Output",
-      highlights: [
-        "Platform-optimised captions",
-        "Industry hashtags",
-        "Engagement-first hooks",
-      ],
+      highlights: ["Platform-optimised captions", "Industry hashtags", "Engagement-first hooks"],
       mockup: {
         type: "content-generator",
         data: {
@@ -257,11 +241,7 @@ const petWellness: CategoryData = {
       description:
         "Reach customers wherever they are. One click distributes content across all connected platforms while maintaining platform-specific formatting.",
       highlightsLabel: "Channels",
-      highlights: [
-        "Cross-platform publishing",
-        "Format auto-adaptation",
-        "Scheduled delivery",
-      ],
+      highlights: ["Cross-platform publishing", "Format auto-adaptation", "Scheduled delivery"],
       mockup: {
         type: "publishing",
         data: {
@@ -276,11 +256,7 @@ const petWellness: CategoryData = {
       description:
         "Never miss an opportunity. When a prospect comments, messages, or replies, the AI responds instantly using your business knowledge and predefined policies.",
       highlightsLabel: "Intelligence",
-      highlights: [
-        "3-second response time",
-        "Context-aware answers",
-        "Automatic escalation",
-      ],
+      highlights: ["3-second response time", "Context-aware answers", "Automatic escalation"],
       mockup: {
         type: "ai-conversation",
         data: {
@@ -297,11 +273,7 @@ const petWellness: CategoryData = {
       description:
         "Turn conversations into revenue. When the AI detects buying intent, the lead automatically moves through your sales pipeline and receives booking options.",
       highlightsLabel: "Pipeline",
-      highlights: [
-        "Intent detection",
-        "Auto-qualification",
-        "One-tap booking link",
-      ],
+      highlights: ["Intent detection", "Auto-qualification", "One-tap booking link"],
       mockup: {
         type: "lead-pipeline",
         data: {
@@ -334,21 +306,13 @@ const plumbing: CategoryData = {
       description:
         "Connect your business in minutes. Answer a few questions about your service area, specialties, and team size. Our AI configures the optimal lead-capture and dispatch workflow for plumbing businesses.",
       highlightsLabel: "Highlights",
-      highlights: [
-        "2-minute setup",
-        "No technical expertise required",
-        "AI-guided configuration",
-      ],
+      highlights: ["2-minute setup", "No technical expertise required", "AI-guided configuration"],
       mockup: {
         type: "onboarding",
         data: {
           businessName: "QuickFix Plumbing",
           industry: "Plumbing Services",
-          goals: [
-            "Generate Leads",
-            "Emergency Bookings",
-            "Service Contracts",
-          ],
+          goals: ["Generate Leads", "Emergency Bookings", "Service Contracts"],
           selectedGoal: 0,
         },
       },
@@ -359,20 +323,12 @@ const plumbing: CategoryData = {
       description:
         "Build your digital business identity. The AI learns your services, pricing, service areas, and technician availability to handle customer queries conversationally.",
       highlightsLabel: "What AI learns",
-      highlights: [
-        "Service catalogue & pricing",
-        "Coverage areas & zones",
-        "Technician schedules",
-      ],
+      highlights: ["Service catalogue & pricing", "Coverage areas & zones", "Technician schedules"],
       mockup: {
         type: "business-profile",
         data: {
           brandVoice: "Professional & Reliable",
-          products: [
-            "Pipe Repair & Fitting",
-            "Drain Cleaning",
-            "Water Heater Installation",
-          ],
+          products: ["Pipe Repair & Fitting", "Drain Cleaning", "Water Heater Installation"],
           targetAudience: "Homeowners",
           profileComplete: 88,
         },
@@ -408,8 +364,7 @@ const plumbing: CategoryData = {
       mockup: {
         type: "ai-command",
         data: {
-          prompt:
-            "Create content for homeowners about monsoon pipe maintenance tips.",
+          prompt: "Create content for homeowners about monsoon pipe maintenance tips.",
         },
       },
     },
@@ -443,11 +398,7 @@ const plumbing: CategoryData = {
       description:
         "Reach homeowners wherever they search. One click distributes content across all connected platforms with area-specific targeting.",
       highlightsLabel: "Channels",
-      highlights: [
-        "Cross-platform publishing",
-        "Area-specific targeting",
-        "Scheduled delivery",
-      ],
+      highlights: ["Cross-platform publishing", "Area-specific targeting", "Scheduled delivery"],
       mockup: {
         type: "publishing",
         data: {
@@ -462,11 +413,7 @@ const plumbing: CategoryData = {
       description:
         "Never miss an emergency call. When a homeowner messages about a leak or blockage, the AI responds instantly with diagnosis questions and dispatch options.",
       highlightsLabel: "Intelligence",
-      highlights: [
-        "Instant emergency triage",
-        "Technician dispatch",
-        "Upfront pricing",
-      ],
+      highlights: ["Instant emergency triage", "Technician dispatch", "Upfront pricing"],
       mockup: {
         type: "ai-conversation",
         data: {
@@ -483,11 +430,7 @@ const plumbing: CategoryData = {
       description:
         "Turn emergencies into booked jobs. When the AI detects urgency, it fast-tracks the lead through your pipeline and offers immediate dispatch.",
       highlightsLabel: "Pipeline",
-      highlights: [
-        "Urgency detection",
-        "Same-day dispatch",
-        "Estimate approval flow",
-      ],
+      highlights: ["Urgency detection", "Same-day dispatch", "Estimate approval flow"],
       mockup: {
         type: "lead-pipeline",
         data: {
@@ -520,11 +463,7 @@ const electrician: CategoryData = {
       description:
         "Connect your business in minutes. Answer a few questions about your service specialties, coverage area, and team certifications. The AI configures a workflow optimised for electrical services.",
       highlightsLabel: "Highlights",
-      highlights: [
-        "2-minute setup",
-        "No technical expertise required",
-        "AI-guided configuration",
-      ],
+      highlights: ["2-minute setup", "No technical expertise required", "AI-guided configuration"],
       mockup: {
         type: "onboarding",
         data: {
@@ -541,20 +480,12 @@ const electrician: CategoryData = {
       description:
         "Build your digital business identity. The AI learns your service list, certifications, coverage zones, and pricing to handle queries with precision.",
       highlightsLabel: "What AI learns",
-      highlights: [
-        "Service list & certifications",
-        "Coverage zones & rates",
-        "Safety protocols",
-      ],
+      highlights: ["Service list & certifications", "Coverage zones & rates", "Safety protocols"],
       mockup: {
         type: "business-profile",
         data: {
           brandVoice: "Professional & Safety-focused",
-          products: [
-            "Wiring & Rewiring",
-            "MCB & Panel Installation",
-            "AC Wiring & Setup",
-          ],
+          products: ["Wiring & Rewiring", "MCB & Panel Installation", "AC Wiring & Setup"],
           targetAudience: "Homeowners & Offices",
           profileComplete: 85,
         },
@@ -590,8 +521,7 @@ const electrician: CategoryData = {
       mockup: {
         type: "ai-command",
         data: {
-          prompt:
-            "Create content about electrical safety tips for summer and monsoon season.",
+          prompt: "Create content about electrical safety tips for summer and monsoon season.",
         },
       },
     },
@@ -601,11 +531,7 @@ const electrician: CategoryData = {
       description:
         "Generate high-performing content automatically. The system creates safety guides, maintenance checklists, and seasonal alerts that build trust and authority.",
       highlightsLabel: "Output",
-      highlights: [
-        "Safety awareness posts",
-        "Maintenance checklists",
-        "Seasonal alerts",
-      ],
+      highlights: ["Safety awareness posts", "Maintenance checklists", "Seasonal alerts"],
       mockup: {
         type: "content-generator",
         data: {
@@ -625,11 +551,7 @@ const electrician: CategoryData = {
       description:
         "Reach customers wherever they search. One click distributes safety content and service offers across all your connected platforms.",
       highlightsLabel: "Channels",
-      highlights: [
-        "Cross-platform publishing",
-        "Locality-based targeting",
-        "Scheduled delivery",
-      ],
+      highlights: ["Cross-platform publishing", "Locality-based targeting", "Scheduled delivery"],
       mockup: {
         type: "publishing",
         data: {
@@ -644,11 +566,7 @@ const electrician: CategoryData = {
       description:
         "Never miss an emergency. When someone messages about a tripping MCB or a sparking outlet, the AI triages instantly and dispatches your certified team.",
       highlightsLabel: "Intelligence",
-      highlights: [
-        "Emergency triage logic",
-        "Certified tech dispatch",
-        "Safety-first responses",
-      ],
+      highlights: ["Emergency triage logic", "Certified tech dispatch", "Safety-first responses"],
       mockup: {
         type: "ai-conversation",
         data: {
@@ -665,11 +583,7 @@ const electrician: CategoryData = {
       description:
         "Turn emergency calls into dispatched jobs. When the AI detects a safety concern, it prioritises the lead and offers immediate technician dispatch.",
       highlightsLabel: "Pipeline",
-      highlights: [
-        "Safety-priority routing",
-        "Express dispatch",
-        "AMC conversion offers",
-      ],
+      highlights: ["Safety-priority routing", "Express dispatch", "AMC conversion offers"],
       mockup: {
         type: "lead-pipeline",
         data: {
@@ -702,21 +616,13 @@ const realEstate: CategoryData = {
       description:
         "Connect your brokerage in minutes. Answer a few questions about your property portfolio, target locations, and buyer segments. The AI configures a workflow built for real estate.",
       highlightsLabel: "Highlights",
-      highlights: [
-        "2-minute setup",
-        "No technical expertise required",
-        "AI-guided configuration",
-      ],
+      highlights: ["2-minute setup", "No technical expertise required", "AI-guided configuration"],
       mockup: {
         type: "onboarding",
         data: {
           businessName: "PrimeNest Realty",
           industry: "Real Estate Brokerage",
-          goals: [
-            "Generate Leads",
-            "Schedule Site Visits",
-            "Close Deals",
-          ],
+          goals: ["Generate Leads", "Schedule Site Visits", "Close Deals"],
           selectedGoal: 0,
         },
       },
@@ -787,11 +693,7 @@ const realEstate: CategoryData = {
       description:
         "Generate high-performing listing content automatically. The system creates property showcases, neighbourhood guides, and investment insights tailored to your target buyers.",
       highlightsLabel: "Output",
-      highlights: [
-        "Property showcase posts",
-        "Neighbourhood guides",
-        "Investment insights",
-      ],
+      highlights: ["Property showcase posts", "Neighbourhood guides", "Investment insights"],
       mockup: {
         type: "content-generator",
         data: {
@@ -811,11 +713,7 @@ const realEstate: CategoryData = {
       description:
         "Reach buyers wherever they search. One click distributes listings and market insights across all platforms with locality-specific targeting.",
       highlightsLabel: "Channels",
-      highlights: [
-        "Cross-platform publishing",
-        "Micro-locality targeting",
-        "Scheduled delivery",
-      ],
+      highlights: ["Cross-platform publishing", "Micro-locality targeting", "Scheduled delivery"],
       mockup: {
         type: "publishing",
         data: {
@@ -830,16 +728,11 @@ const realEstate: CategoryData = {
       description:
         "Never miss a buyer. When someone enquires about a property, the AI qualifies their budget, location preference, and timeline — then offers matching listings instantly.",
       highlightsLabel: "Intelligence",
-      highlights: [
-        "Budget qualification",
-        "Instant listing match",
-        "Site visit scheduling",
-      ],
+      highlights: ["Budget qualification", "Instant listing match", "Site visit scheduling"],
       mockup: {
         type: "ai-conversation",
         data: {
-          customerMessage:
-            "Looking for a 2BHK under 1.5 Cr in Andheri, ready to move in.",
+          customerMessage: "Looking for a 2BHK under 1.5 Cr in Andheri, ready to move in.",
           aiResponse:
             "We have 3 matching properties in Andheri West. Best match: 2BHK, 850 sqft, ₹1.35 Cr, ready possession. Would you like to schedule a site visit this weekend?",
           responseTime: "3 sec",
@@ -852,21 +745,11 @@ const realEstate: CategoryData = {
       description:
         "Turn enquiries into site visits. When the AI detects serious buying intent, it schedules site visits, sends location pins, and follows up automatically.",
       highlightsLabel: "Pipeline",
-      highlights: [
-        "Intent scoring",
-        "Auto site-visit scheduling",
-        "Post-visit follow-up",
-      ],
+      highlights: ["Intent scoring", "Auto site-visit scheduling", "Post-visit follow-up"],
       mockup: {
         type: "lead-pipeline",
         data: {
-          stages: [
-            "New Enquiry",
-            "Qualified",
-            "Site Visit Scheduled",
-            "Offer Made",
-            "Deal Closed",
-          ],
+          stages: ["New Enquiry", "Qualified", "Site Visit Scheduled", "Offer Made", "Deal Closed"],
           activeStage: 3,
           leadScore: 87,
         },
@@ -895,21 +778,13 @@ const loanBrokers: CategoryData = {
       description:
         "Connect your brokerage in minutes. Answer a few questions about your loan products, lender network, and target audience. The AI configures a workflow designed for financial services.",
       highlightsLabel: "Highlights",
-      highlights: [
-        "2-minute setup",
-        "No technical expertise required",
-        "AI-guided configuration",
-      ],
+      highlights: ["2-minute setup", "No technical expertise required", "AI-guided configuration"],
       mockup: {
         type: "onboarding",
         data: {
           businessName: "FinBridge Loans",
           industry: "Loan Brokerage",
-          goals: [
-            "Generate Leads",
-            "Pre-qualify Applicants",
-            "Schedule Consultations",
-          ],
+          goals: ["Generate Leads", "Pre-qualify Applicants", "Schedule Consultations"],
           selectedGoal: 0,
         },
       },
@@ -920,11 +795,7 @@ const loanBrokers: CategoryData = {
       description:
         "Build your digital brokerage identity. The AI learns your loan products, lender tie-ups, interest rate ranges, and eligibility criteria to answer applicant queries accurately.",
       highlightsLabel: "What AI learns",
-      highlights: [
-        "Loan products & rates",
-        "Lender partnerships",
-        "Eligibility criteria",
-      ],
+      highlights: ["Loan products & rates", "Lender partnerships", "Eligibility criteria"],
       mockup: {
         type: "business-profile",
         data: {
@@ -980,11 +851,7 @@ const loanBrokers: CategoryData = {
       description:
         "Generate high-performing financial content automatically. The system creates rate comparisons, eligibility guides, and EMI calculators that attract serious applicants.",
       highlightsLabel: "Output",
-      highlights: [
-        "Rate comparison posts",
-        "Eligibility guides",
-        "EMI calculator content",
-      ],
+      highlights: ["Rate comparison posts", "Eligibility guides", "EMI calculator content"],
       mockup: {
         type: "content-generator",
         data: {
@@ -1004,11 +871,7 @@ const loanBrokers: CategoryData = {
       description:
         "Reach potential borrowers wherever they research. One click distributes content across all platforms with income-segment and city-level targeting.",
       highlightsLabel: "Channels",
-      highlights: [
-        "Cross-platform publishing",
-        "Income-segment targeting",
-        "City-level reach",
-      ],
+      highlights: ["Cross-platform publishing", "Income-segment targeting", "City-level reach"],
       mockup: {
         type: "publishing",
         data: {
@@ -1023,16 +886,11 @@ const loanBrokers: CategoryData = {
       description:
         "Never miss an applicant. When someone asks about rates, eligibility, or EMI, the AI responds instantly with personalised options from your lender network.",
       highlightsLabel: "Intelligence",
-      highlights: [
-        "Instant rate lookup",
-        "Pre-qualification checks",
-        "Lender matching",
-      ],
+      highlights: ["Instant rate lookup", "Pre-qualification checks", "Lender matching"],
       mockup: {
         type: "ai-conversation",
         data: {
-          customerMessage:
-            "What's the best rate for a 50L home loan? I'm salaried, 12L annual.",
+          customerMessage: "What's the best rate for a 50L home loan? I'm salaried, 12L annual.",
           aiResponse:
             "Based on current offers, SBI is at 8.5% and HDFC at 8.65% for your profile. EMI would be approx ₹43,391/mo for 20 years. Shall I check your pre-approval eligibility?",
           responseTime: "3 sec",
@@ -1045,11 +903,7 @@ const loanBrokers: CategoryData = {
       description:
         "Turn enquiries into consultations. When the AI confirms eligibility, it auto-schedules a consultation and sends the applicant a document checklist.",
       highlightsLabel: "Pipeline",
-      highlights: [
-        "Eligibility pre-check",
-        "Auto-consultation booking",
-        "Document checklist sent",
-      ],
+      highlights: ["Eligibility pre-check", "Auto-consultation booking", "Document checklist sent"],
       mockup: {
         type: "lead-pipeline",
         data: {

@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
-import { CalendarCheck, Megaphone, MessageSquare, Send, Star, UserPlus, type LucideIcon } from "lucide-react";
+import {
+  CalendarCheck,
+  Megaphone,
+  MessageSquare,
+  Send,
+  Star,
+  UserPlus,
+  type LucideIcon,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 type Activity = {
@@ -108,16 +116,22 @@ export function DashboardMockup() {
         <span className="w-2.5 h-2.5 rounded-full bg-hairline/40" />
         <span className="w-2.5 h-2.5 rounded-full bg-hairline/40" />
         <span className="w-2.5 h-2.5 rounded-full bg-hairline/40" />
-        <span className="ml-3 font-mono text-mono-sm text-stone">{t("app.iievi.in/dashboard")}</span>
+        <span className="ml-3 font-mono text-mono-sm text-stone">
+          {t("app.iievi.in/dashboard")}
+        </span>
         <span className="ml-auto inline-flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-signal animate-pulse" />
-          <span className="font-mono text-mono-sm text-stone uppercase tracking-[0.14em]">{t("Live")}</span>
+          <span className="font-mono text-mono-sm text-stone uppercase tracking-[0.14em]">
+            {t("Live")}
+          </span>
         </span>
       </div>
 
       {/* Today stats */}
       <div className="px-5 pt-5 pb-4 border-b border-hairline">
-        <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">{t("Today")}</p>
+        <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">
+          {t("Today")}
+        </p>
         <div className="mt-3 grid grid-cols-3 gap-3">
           <div>
             <p className="font-display text-[28px] leading-none text-ink tabular-nums">
@@ -177,9 +191,7 @@ export function DashboardMockup() {
                       </p>
                     </div>
 
-                    <span className="font-mono text-mono-sm text-stone shrink-0">
-                      {item.age}
-                    </span>
+                    <span className="font-mono text-mono-sm text-stone shrink-0">{item.age}</span>
                   </div>
                 </motion.div>
               );
@@ -190,7 +202,9 @@ export function DashboardMockup() {
       {/* Sparkline */}
       <div className="flex items-end justify-between gap-4 px-5 py-4">
         <div>
-          <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">{t("This week")}</p>
+          <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">
+            {t("This week")}
+          </p>
           <p className="mt-1 font-display text-headline-sm text-ink">{t("+34% vs last")}</p>
         </div>
         <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} className="overflow-visible">

@@ -23,7 +23,11 @@ export function Accordion({ items }: { items: Item[] }) {
             >
               <span className="font-body text-headline-sm font-medium text-ink">{it.question}</span>
               <span className="shrink-0 text-ink">
-                {isOpen ? <Minus size={20} strokeWidth={1.5} /> : <Plus size={20} strokeWidth={1.5} />}
+                {isOpen ? (
+                  <Minus size={20} strokeWidth={1.5} />
+                ) : (
+                  <Plus size={20} strokeWidth={1.5} />
+                )}
               </span>
             </button>
             <AnimatePresence initial={false}>
@@ -35,7 +39,9 @@ export function Accordion({ items }: { items: Item[] }) {
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   className="overflow-hidden"
                 >
-                  <div className="pb-6 pr-12 font-body text-body-sm text-graphite max-w-3xl">{it.answer}</div>
+                  <div className="pb-6 pr-12 font-body text-body-sm text-graphite max-w-3xl">
+                    {it.answer}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

@@ -13,7 +13,11 @@ interface ChatMockupProps {
   className?: string;
 }
 
-export function ChatMockup({ title = "WhatsApp Business", messages, className = "" }: ChatMockupProps) {
+export function ChatMockup({
+  title = "WhatsApp Business",
+  messages,
+  className = "",
+}: ChatMockupProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const reduce = useReducedMotion();
@@ -40,9 +44,7 @@ export function ChatMockup({ title = "WhatsApp Business", messages, className = 
               <div className="max-w-[78%] flex flex-col gap-1">
                 <div
                   className={`px-4 py-2.5 text-body-sm ${
-                    mine
-                      ? "bg-ink text-surface"
-                      : "bg-transparent border border-hairline text-ink"
+                    mine ? "bg-ink text-surface" : "bg-transparent border border-hairline text-ink"
                   }`}
                 >
                   {m.text}

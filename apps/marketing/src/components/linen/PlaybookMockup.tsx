@@ -78,9 +78,7 @@ function MockupHeader({ title }: { title: string }) {
   const { t } = useTranslation();
   return (
     <div className="flex items-center justify-between px-5 py-3 border-b border-hairline bg-neutral">
-      <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">
-        {t(title)}
-      </p>
+      <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">{t(title)}</p>
       <div className="flex gap-1.5">
         <span className="w-2 h-2 rounded-full bg-hairline/40" />
         <span className="w-2 h-2 rounded-full bg-hairline/40" />
@@ -130,9 +128,7 @@ function OnboardingMockup({ data }: { data: OnboardingData }) {
                   className={`w-4 h-4 rounded-full border flex items-center justify-center
                     ${i === data.selectedGoal ? "border-signal bg-signal/10" : "border-hairline"}`}
                 >
-                  {i === data.selectedGoal && (
-                    <div className="w-2 h-2 rounded-full bg-signal" />
-                  )}
+                  {i === data.selectedGoal && <div className="w-2 h-2 rounded-full bg-signal" />}
                 </div>
                 <span className="text-body-sm text-ink">{t(goal)}</span>
               </div>
@@ -227,7 +223,10 @@ function SecureApiMockup({ data }: { data: SecureApiData }) {
       <div className="p-6">
         <div className="space-y-3 mb-8">
           {data.platforms.map((p, i) => (
-            <div key={p.name} className="flex justify-between items-center border-b border-hairline/40 pb-3">
+            <div
+              key={p.name}
+              className="flex justify-between items-center border-b border-hairline/40 pb-3"
+            >
               <span className="text-body-sm text-ink">{p.name}</span>
               <motion.div
                 initial={{ opacity: 0 }}
@@ -241,7 +240,11 @@ function SecureApiMockup({ data }: { data: SecureApiData }) {
           ))}
         </div>
         <div className="bg-neutral p-5 border border-hairline relative overflow-hidden">
-          <ShieldCheck size={80} className="absolute -right-4 -bottom-4 text-hairline/20" strokeWidth={1} />
+          <ShieldCheck
+            size={80}
+            className="absolute -right-4 -bottom-4 text-hairline/20"
+            strokeWidth={1}
+          />
           <p className="text-label-sm font-mono text-stone mb-4 uppercase tracking-[0.14em]">
             {t("API Key Status")}
           </p>
@@ -277,11 +280,7 @@ function SecureApiMockup({ data }: { data: SecureApiData }) {
 function AiCommandMockup({ data }: { data: AiCommandData }) {
   const { t } = useTranslation();
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
       <MockupHeader title="AI Command Center" />
       <div className="p-6">
         <label className="block text-label-sm font-mono text-stone mb-3 uppercase tracking-[0.14em]">
@@ -372,7 +371,7 @@ function ContentGeneratorMockup({ data }: { data: ContentGeneratorData }) {
             {t("Generated")}
           </span>
         </motion.div>
-        
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -397,7 +396,10 @@ function PublishingMockup({ data }: { data: PublishingData }) {
       <div className="p-6">
         <div className="space-y-0 border border-hairline">
           {data.platforms.map((p, i) => (
-            <div key={p.name} className="flex justify-between items-center p-3 border-b border-hairline last:border-0 relative overflow-hidden">
+            <div
+              key={p.name}
+              className="flex justify-between items-center p-3 border-b border-hairline last:border-0 relative overflow-hidden"
+            >
               <span className="text-body-sm text-ink relative z-10">{p.name}</span>
               <motion.div
                 initial={{ opacity: 0, x: 10 }}
@@ -445,11 +447,7 @@ function PublishingMockup({ data }: { data: PublishingData }) {
 function AiConversationMockup({ data }: { data: AiConversationData }) {
   const { t } = useTranslation();
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
       <MockupHeader title="Incoming Lead" />
       <div className="p-5 flex flex-col gap-4">
         {/* Customer message */}
@@ -461,7 +459,9 @@ function AiConversationMockup({ data }: { data: AiConversationData }) {
         >
           <div className="flex items-center gap-2 mb-1">
             <User size={12} className="text-stone" />
-            <span className="text-mono-sm font-mono text-stone uppercase tracking-[0.14em]">{t("Customer")}</span>
+            <span className="text-mono-sm font-mono text-stone uppercase tracking-[0.14em]">
+              {t("Customer")}
+            </span>
           </div>
           <div className="bg-neutral border border-hairline px-4 py-2.5 text-body-sm text-ink max-w-[85%]">
             {t(data.customerMessage)}
@@ -476,7 +476,9 @@ function AiConversationMockup({ data }: { data: AiConversationData }) {
             transition={{ delay: 1.5 }}
             className="flex items-center gap-2 mb-1"
           >
-            <span className="text-mono-sm font-mono text-stone uppercase tracking-[0.14em]">{t("AI Assistant")}</span>
+            <span className="text-mono-sm font-mono text-stone uppercase tracking-[0.14em]">
+              {t("AI Assistant")}
+            </span>
             <Bot size={12} className="text-signal" />
           </motion.div>
           <motion.div
@@ -489,7 +491,7 @@ function AiConversationMockup({ data }: { data: AiConversationData }) {
             {t(data.aiResponse)}
           </motion.div>
         </div>
-        
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -501,11 +503,7 @@ function AiConversationMockup({ data }: { data: AiConversationData }) {
           </span>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 3.5 }}
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.5 }}>
           <ApproveModifyButtons />
         </motion.div>
       </div>
@@ -529,7 +527,7 @@ function LeadPipelineMockup({ data }: { data: LeadPipelineData }) {
             const isCompleted = i < data.activeStage;
             const isActive = i === data.activeStage;
             const isFuture = i > data.activeStage;
-            
+
             return (
               <div key={stage} className="relative flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -558,12 +556,14 @@ function LeadPipelineMockup({ data }: { data: LeadPipelineData }) {
                 >
                   {isCompleted && <Check size={14} className="text-ink" />}
                   {isActive && <div className="w-2 h-2 rounded-full bg-signal animate-pulse" />}
-                  {isFuture && <div className="w-1.5 h-1.5 rounded-full border border-hairline/50" />}
+                  {isFuture && (
+                    <div className="w-1.5 h-1.5 rounded-full border border-hairline/50" />
+                  )}
                 </motion.div>
               </div>
             );
           })}
-          
+
           {/* Active indicator line overlay */}
           <motion.div
             initial={{ height: 0 }}
@@ -640,7 +640,7 @@ function AdBudgetMockup({ data }: { data: AdBudgetData }) {
             <span className="text-stone font-body text-body-sm">/{t("day")}</span>
           </div>
         </div>
-        
+
         <ApproveModifyButtons />
       </div>
     </motion.div>
@@ -663,7 +663,10 @@ function TargetReachMockup({ data }: { data: TargetReachData }) {
           </label>
           <div className="flex flex-wrap gap-2">
             {data.locations.map((loc) => (
-              <span key={loc} className="inline-block border border-hairline px-2.5 py-1 text-body-sm text-ink bg-neutral/50">
+              <span
+                key={loc}
+                className="inline-block border border-hairline px-2.5 py-1 text-body-sm text-ink bg-neutral/50"
+              >
                 {t(loc)}
               </span>
             ))}
@@ -693,7 +696,10 @@ function TargetReachMockup({ data }: { data: TargetReachData }) {
           </label>
           <div className="flex flex-wrap gap-2">
             {data.detailedTargeting.map((dt) => (
-              <span key={dt} className="inline-block border border-hairline px-2.5 py-1 text-body-sm text-ink bg-neutral/50">
+              <span
+                key={dt}
+                className="inline-block border border-hairline px-2.5 py-1 text-body-sm text-ink bg-neutral/50"
+              >
                 {t(dt)}
               </span>
             ))}
@@ -707,7 +713,7 @@ function TargetReachMockup({ data }: { data: TargetReachData }) {
             {t(data.placements)}
           </div>
         </div>
-        
+
         <ApproveModifyButtons className="pt-2 border-t border-hairline/40" />
       </div>
     </motion.div>

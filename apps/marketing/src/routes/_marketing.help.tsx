@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, Zap, CreditCard, MessageSquare, Shield, Settings, Users, ChevronRight } from "lucide-react";
+import {
+  Search,
+  Zap,
+  CreditCard,
+  MessageSquare,
+  Shield,
+  Settings,
+  Users,
+  ChevronRight,
+} from "lucide-react";
 import { Container, Section } from "@/components/linen/Container";
 import { Rule } from "@/components/linen/Rule";
 import { SectionLabel } from "@/components/linen/SectionLabel";
@@ -33,7 +42,7 @@ const WIKI_DATA = [
       { id: "gs-1", title: "Quickstart Guide", content: LOREM },
       { id: "gs-2", title: "Connecting WhatsApp", content: LOREM },
       { id: "gs-3", title: "Inviting Team Members", content: LOREM },
-    ]
+    ],
   },
   {
     category: "Conversations & AI",
@@ -42,7 +51,7 @@ const WIKI_DATA = [
       { id: "ai-1", title: "How the AI works", content: LOREM },
       { id: "ai-2", title: "Training your assistant", content: LOREM },
       { id: "ai-3", title: "Handling escalations", content: LOREM },
-    ]
+    ],
   },
   {
     category: "Billing & invoices",
@@ -50,7 +59,7 @@ const WIKI_DATA = [
     articles: [
       { id: "bill-1", title: "Understanding your invoice", content: LOREM },
       { id: "bill-2", title: "Payment methods", content: LOREM },
-    ]
+    ],
   },
   {
     category: "Settings & integrations",
@@ -58,7 +67,7 @@ const WIKI_DATA = [
     articles: [
       { id: "set-1", title: "General Settings", content: LOREM },
       { id: "set-2", title: "CRM Integrations", content: LOREM },
-    ]
+    ],
   },
   {
     category: "Security & privacy",
@@ -66,7 +75,7 @@ const WIKI_DATA = [
     articles: [
       { id: "sec-1", title: "Data Isolation", content: LOREM },
       { id: "sec-2", title: "Compliance", content: LOREM },
-    ]
+    ],
   },
   {
     category: "Team & permissions",
@@ -74,7 +83,7 @@ const WIKI_DATA = [
     articles: [
       { id: "team-1", title: "Roles and access", content: LOREM },
       { id: "team-2", title: "Activity logs", content: LOREM },
-    ]
+    ],
   },
 ];
 
@@ -82,20 +91,25 @@ function HelpPage() {
   const { t } = useTranslation();
   const [activeArticleId, setActiveArticleId] = useState(WIKI_DATA[0].articles[0].id);
 
-  const flatArticles = WIKI_DATA.flatMap(c => c.articles);
-  const currentIndex = flatArticles.findIndex(a => a.id === activeArticleId);
-  
-  const previousArticle = currentIndex > 0 ? flatArticles.at(currentIndex - 1) : null;
-  const nextArticle = currentIndex >= 0 && currentIndex < flatArticles.length - 1 ? flatArticles.at(currentIndex + 1) : null;
+  const flatArticles = WIKI_DATA.flatMap((c) => c.articles);
+  const currentIndex = flatArticles.findIndex((a) => a.id === activeArticleId);
 
-  const activeCategory = WIKI_DATA.find(c => c.articles.some(a => a.id === activeArticleId));
-  const activeArticle = activeCategory?.articles.find(a => a.id === activeArticleId);
+  const previousArticle = currentIndex > 0 ? flatArticles.at(currentIndex - 1) : null;
+  const nextArticle =
+    currentIndex >= 0 && currentIndex < flatArticles.length - 1
+      ? flatArticles.at(currentIndex + 1)
+      : null;
+
+  const activeCategory = WIKI_DATA.find((c) => c.articles.some((a) => a.id === activeArticleId));
+  const activeArticle = activeCategory?.articles.find((a) => a.id === activeArticleId);
 
   return (
     <>
       <Container>
         <div className="pt-16 md:pt-24 pb-12 max-w-3xl">
-          <FadeIn><SectionLabel>{t("How can we help you?")}</SectionLabel></FadeIn>
+          <FadeIn>
+            <SectionLabel>{t("How can we help you?")}</SectionLabel>
+          </FadeIn>
           <FadeIn delay={0.05}>
             <h1 className="mt-6 font-display text-[44px] md:text-display-lg text-ink leading-[0.96]">
               {t("Help Center")}
@@ -108,7 +122,11 @@ function HelpPage() {
                 placeholder="Search guides, troubleshooting, billing…"
                 className="w-full bg-transparent border-0 border-t border-b border-hairline px-0 py-5 pr-10 font-body text-body-md text-ink placeholder:text-stone focus:outline-none focus:border-b-2 focus:border-b-signal"
               />
-              <Search size={20} className="absolute right-2 top-1/2 -translate-y-1/2 text-stone" strokeWidth={1.5} />
+              <Search
+                size={20}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-stone"
+                strokeWidth={1.5}
+              />
             </div>
           </FadeIn>
         </div>
@@ -118,7 +136,6 @@ function HelpPage() {
 
       <Section>
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
-          
           {/* Sidebar */}
           <div className="w-full lg:w-[320px] shrink-0">
             <div className="lg:sticky lg:top-32 space-y-8">
@@ -162,19 +179,21 @@ function HelpPage() {
                   <ChevronRight size={14} />
                   <span className="text-ink">{activeArticle.title}</span>
                 </div>
-                
+
                 <h2 className="font-display text-headline-lg text-ink mb-8">
                   {activeArticle.title}
                 </h2>
-                
+
                 <div className="text-body-md text-graphite leading-[1.7] space-y-6">
-                  {activeArticle.content.split('\n\n').map((paragraph, idx) => (
+                  {activeArticle.content.split("\n\n").map((paragraph, idx) => (
                     <p key={idx}>{paragraph}</p>
                   ))}
-                  
+
                   {/* Sample sequential structure placeholder inside the article */}
                   <div className="my-10 p-6 bg-neutral border border-hairline">
-                    <h4 className="font-display text-headline-sm text-ink mb-4">{t("In this guide")}</h4>
+                    <h4 className="font-display text-headline-sm text-ink mb-4">
+                      {t("In this guide")}
+                    </h4>
                     <ol className="list-decimal list-inside space-y-2 text-body-sm text-graphite">
                       <li>{t("Introduction and prerequisites")}</li>
                       <li>{t("Step-by-step configuration")}</li>
@@ -183,31 +202,37 @@ function HelpPage() {
                     </ol>
                   </div>
                 </div>
-                
+
                 {/* Navigation Footer */}
                 <div className="mt-16 pt-8 border-t border-hairline flex items-center justify-between">
                   {previousArticle ? (
-                    <button 
+                    <button
                       onClick={() => {
                         setActiveArticleId(previousArticle.id);
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       className="text-body-sm text-graphite hover:text-ink transition-colors flex items-center gap-2 text-left"
                     >
-                      &larr; <span className="underline underline-offset-4 decoration-hairline">{previousArticle.title}</span>
+                      &larr;{" "}
+                      <span className="underline underline-offset-4 decoration-hairline">
+                        {previousArticle.title}
+                      </span>
                     </button>
                   ) : (
                     <div />
                   )}
                   {nextArticle ? (
-                    <button 
+                    <button
                       onClick={() => {
                         setActiveArticleId(nextArticle.id);
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       className="text-body-sm text-graphite hover:text-ink transition-colors flex items-center gap-2 text-right"
                     >
-                      <span className="underline underline-offset-4 decoration-hairline">{nextArticle.title}</span> &rarr;
+                      <span className="underline underline-offset-4 decoration-hairline">
+                        {nextArticle.title}
+                      </span>{" "}
+                      &rarr;
                     </button>
                   ) : (
                     <div />
@@ -216,7 +241,6 @@ function HelpPage() {
               </FadeIn>
             )}
           </div>
-
         </div>
       </Section>
     </>

@@ -12,7 +12,11 @@ export const Route = createFileRoute("/_marketing/demo")({
   head: () => ({
     meta: [
       { title: "Book a Demo — IIEVI" },
-      { name: "description", content: "See IIEVI live on your WhatsApp number. 20-minute demo, real conversations, your questions answered." },
+      {
+        name: "description",
+        content:
+          "See IIEVI live on your WhatsApp number. 20-minute demo, real conversations, your questions answered.",
+      },
       { property: "og:title", content: "Book a Demo — IIEVI" },
       { property: "og:description", content: "20-minute live demo with the IIEVI team." },
     ],
@@ -78,12 +82,17 @@ function DemoPage() {
           </FadeIn>
           <FadeIn delay={0.05}>
             <div className="mt-8 bg-neutral border border-hairline p-6">
-              <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">This Week — IST</p>
+              <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">
+                This Week — IST
+              </p>
               <div className="mt-4 grid grid-cols-5 gap-2">
                 {DAYS.map((d, i) => (
                   <button
                     key={d}
-                    onClick={() => { setDay(i); setSlot(null); }}
+                    onClick={() => {
+                      setDay(i);
+                      setSlot(null);
+                    }}
                     className={`py-3 font-body text-body-sm transition-colors cursor-pointer border ${
                       day === i
                         ? "border-2 border-signal text-ink"
@@ -98,7 +107,9 @@ function DemoPage() {
                 ))}
               </div>
               <Rule className="my-6" />
-              <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">Available Slots</p>
+              <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">
+                Available Slots
+              </p>
               <div className="mt-4 grid grid-cols-3 gap-2">
                 {SLOTS.map((s) => (
                   <button
@@ -119,8 +130,12 @@ function DemoPage() {
           {slot && (
             <FadeIn>
               <div className="mt-6 p-4 border border-hairline">
-                <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">Selected</p>
-                <p className="mt-2 text-body-md text-ink">{DAYS[day]} December · {slot} IST</p>
+                <p className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">
+                  Selected
+                </p>
+                <p className="mt-2 text-body-md text-ink">
+                  {DAYS[day]} December · {slot} IST
+                </p>
                 <button className="mt-4 w-full bg-ink text-surface py-3 px-4 font-body text-label-sm uppercase tracking-[0.14em] hover:bg-transparent hover:text-ink border border-ink transition-colors cursor-pointer">
                   Confirm Booking
                 </button>

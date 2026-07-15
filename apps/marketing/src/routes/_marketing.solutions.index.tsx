@@ -39,7 +39,9 @@ function SolutionsLandingPage() {
           </FadeIn>
           <FadeIn delay={0.1}>
             <p className="mt-8 text-body-md text-graphite max-w-2xl">
-              {t("Every service business has unique challenges, but the core problems are the same: lost leads, missed follow-ups, and empty calendars. Explore our industry-specific playbooks to see how IIEVI solves them.")}
+              {t(
+                "Every service business has unique challenges, but the core problems are the same: lost leads, missed follow-ups, and empty calendars. Explore our industry-specific playbooks to see how IIEVI solves them.",
+              )}
             </p>
           </FadeIn>
         </div>
@@ -52,8 +54,15 @@ function SolutionsLandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Object.entries(SOLUTION_CATEGORIES).map(([slug, data], index) => (
             <FadeIn key={slug} delay={index * 0.05}>
-              <Link to="/solutions/$category" params={{ category: slug }} className="block h-full group">
-                <Card variant="paper" className="h-full flex flex-col hover:border-signal transition-colors">
+              <Link
+                to="/solutions/$category"
+                params={{ category: slug }}
+                className="block h-full group"
+              >
+                <Card
+                  variant="paper"
+                  className="h-full flex flex-col hover:border-signal transition-colors"
+                >
                   <Pill variant="outline">{t(data.label)}</Pill>
                   <h3 className="mt-6 font-display text-headline-sm text-ink group-hover:text-signal transition-colors">
                     {t(data.headline)}
@@ -63,7 +72,10 @@ function SolutionsLandingPage() {
                   </p>
                   <div className="mt-8 pt-4 border-t border-hairline flex items-center justify-between font-mono text-mono-sm uppercase tracking-[0.14em] text-ink">
                     <span>{t("See Playbook")}</span>
-                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight
+                      size={14}
+                      className="group-hover:translate-x-1 transition-transform"
+                    />
                   </div>
                 </Card>
               </Link>

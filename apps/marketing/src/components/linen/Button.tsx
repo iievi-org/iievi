@@ -7,10 +7,8 @@ const base =
   "inline-flex items-center justify-center gap-2 font-body text-label-sm uppercase tracking-[0.14em] px-[18px] py-[12px] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal cursor-pointer select-none";
 
 const variants: Record<Variant, string> = {
-  primary:
-    "bg-ink text-surface border border-ink hover:bg-surface hover:text-ink",
-  ghost:
-    "bg-transparent text-ink border border-hairline hover:bg-ink hover:text-surface",
+  primary: "bg-ink text-surface border border-ink hover:bg-surface hover:text-ink",
+  ghost: "bg-transparent text-ink border border-hairline hover:bg-ink hover:text-surface",
   "ghost-inverse":
     "bg-transparent text-surface border border-surface hover:bg-surface hover:text-ink",
 };
