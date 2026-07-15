@@ -90,3 +90,35 @@ export const DEV_PORTS = {
   redis: 6379,
   flower: 5555,
 } as const;
+
+/**
+ * Feature keys exposed by GET /billing/capabilities (the `can_*` booleans).
+ * `useCapabilities().hasFeature(name)` checks these; keep in sync with the
+ * Capabilities interface in @iievi/types.
+ */
+export const FEATURES = [
+  "can_generate_posts",
+  "can_create_ads",
+  "can_publish_tiktok",
+  "can_publish_linkedin",
+  "can_use_ai_conversations",
+] as const;
+export type FeatureName = (typeof FEATURES)[number];
+
+/**
+ * Realtime event types emitted over the tenant WebSocket channel. Mirror of
+ * apps/api/app/modules/realtime/events.py EventType — keep in sync.
+ */
+export const WS_EVENT_TYPES = [
+  "new_lead",
+  "lead_status_changed",
+  "ai_typing_started",
+  "ai_response_sent",
+  "new_message",
+  "lead_handed_off",
+  "notification_count_changed",
+  "post_generated",
+  "post_published",
+  "post_failed",
+] as const;
+export type WsEventType = (typeof WS_EVENT_TYPES)[number];
