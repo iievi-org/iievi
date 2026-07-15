@@ -20,6 +20,10 @@ EventType = Literal[
     "lead_status_changed",
     "ai_typing_started",
     "ai_response_sent",
+    # AI conversation engine (Prompt 7)
+    "new_message",
+    "lead_handed_off",
+    "notification_count_changed",
     "post_generated",
     "post_published",
     "post_failed",
