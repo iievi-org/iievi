@@ -122,3 +122,5 @@ export const WS_EVENT_TYPES = [
   "post_failed",
 ] as const;
 export type WsEventType = (typeof WS_EVENT_TYPES)[number];
+
+export { CATEGORIES, CATEGORY_KEYS, type CategoryConfig } from "./categories";
