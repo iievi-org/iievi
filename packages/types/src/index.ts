@@ -222,6 +222,36 @@ export interface ProfileCompleteness {
 }
 
 // ---------------------------------------------------------------------------
+// Onboarding (12-stage conversational state machine)
+// ---------------------------------------------------------------------------
+
+export type OnboardingStage =
+  | "welcome"
+  | "category_select"
+  | "business_info"
+  | "business_overview"
+  | "target_audience"
+  | "existing_customers"
+  | "competitor_analysis"
+  | "brand_identity"
+  | "creative_preferences"
+  | "marketing_goals"
+  | "lead_management"
+  | "confirm_and_create";
+
+/** POST /onboarding/message — one conversational turn. */
+export interface OnboardingTurnResponse {
+  stage: OnboardingStage;
+  reply: string;
+  /** True when this turn completed the current stage and advanced. */
+  advanced: boolean;
+  /** True only at confirm_and_create once the profile is materialised. */
+  completed?: boolean;
+  /** True when the user must register/login to proceed (confirm stage). */
+  requires_auth?: boolean;
+}
+
+// ---------------------------------------------------------------------------
 // Leads + conversations
 // ---------------------------------------------------------------------------
 
@@ -408,6 +438,28 @@ export interface AuditLogEntry {
   tenant_id?: string | null;
   request_id?: string | null;
   [key: string]: unknown;
+}
+
+/** GET /admin/logs — Axiom-backed log query result. */
+export interface AdminLogsResponse {
+  logs: AuditLogEntry[];
+  count: number;
+  query: {
+    tenant_id: string | null;
+    from_date: string;
+    to_date: string;
+    level: string | null;
+  };
+}
+
+/** GET /admin/feature-flags — one flag (FlagOut). */
+export interface FeatureFlag {
+  flag_key: string;
+  description: string | null;
+  enabled_globally: boolean;
+  enabled_for_tenants: string[];
+  disabled_for_tenants: string[];
+  minimum_plan: Plan | null;
 }
 
 // ---------------------------------------------------------------------------
