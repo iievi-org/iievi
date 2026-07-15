@@ -224,8 +224,10 @@ def test_facebook_comment_triggers_public_reply_and_dm(
     monkeypatch.setattr(intent_classification_service, "classify_intent", _fake_intent)
     monkeypatch.setattr(credential_service, "get_decrypted_credential", _fake_credential)
 
+    from app.worker import ai_worker
+
     enqueued: list[dict] = []
-    monkeypatch.setattr(message_worker.generate_ai_response, "delay", lambda p: enqueued.append(p))
+    monkeypatch.setattr(ai_worker.generate_ai_response, "delay", lambda p: enqueued.append(p))
 
     message_worker.process_facebook_comment.run(
         {
