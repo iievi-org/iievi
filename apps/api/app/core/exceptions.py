@@ -110,6 +110,17 @@ class WhatsAppSessionExpiredError(IIEVIException):
     code = "whatsapp_session_expired"
 
 
+class InvalidStateTransitionError(IIEVIException):
+    """A conversation state machine transition the transition table forbids.
+
+    This is a programming error (bad call site), not user input — the state
+    machine enforces the transition graph strictly.
+    """
+
+    status_code = 409
+    code = "invalid_state_transition"
+
+
 def _error_response(
     status_code: int, code: str, message: str, details: dict[str, object]
 ) -> JSONResponse:
