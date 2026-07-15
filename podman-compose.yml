@@ -77,6 +77,8 @@ services:
         "--loglevel=INFO", "--concurrency=4",
         "-Q", "ai_conversations,post_publishing,creative_generation,lead_outreach,ad_management,usage_tracking",
       ]
+    # Warm shutdown: let the current task finish before the container dies
+    stop_grace_period: 300s
     environment:
       ENVIRONMENT: ${ENVIRONMENT:-development}
       # Connects as iievi_app (NOBYPASSRLS) so local behaviour matches production RLS.

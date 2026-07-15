@@ -32,7 +32,8 @@ jobs:
           --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       ENVIRONMENT: development
-      DATABASE_URL: postgresql+asyncpg://iievi:iievi@localhost:5432/iievi
+      DATABASE_URL: postgresql+asyncpg://iievi_app:iievi_app_dev_only@localhost:5432/iievi
+      DATABASE_URL_OWNER: postgresql+asyncpg://iievi:iievi@localhost:5432/iievi
       REDIS_URL: redis://localhost:6379/0
       JWT_SECRET: ci-jwt-secret-0123456789abcdef0123456789abcdef
       JWT_REFRESH_SECRET: ci-refresh-secret-0123456789abcdef0123456789abcdef
@@ -46,6 +47,9 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
+
+      - name: Install system libraries (libmagic for MIME detection)
+        run: sudo apt-get update -q && sudo apt-get install -y -q libmagic1
 
       - name: Install dependencies
         run: uv sync --frozen

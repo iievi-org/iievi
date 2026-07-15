@@ -2,13 +2,12 @@
   "name": "@iievi/constants",
   "version": "0.1.0",
   "private": true,
-  "description": "Category configs, plan limits, platform enums. Portable — no DOM, no Next.js imports.",
+  "description": "Category configs, plan limits, platform enums. Portable \u2014 no DOM, no Next.js imports.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint src"
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "typescript": "^5.6.0"

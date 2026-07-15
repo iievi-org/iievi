@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{{ subject|default('IIEVI') }}</title>
+  </head>
+  <body style="margin:0; padding:0; background:#f1ede3; -webkit-font-smoothing:antialiased;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f1ede3; padding:32px 0;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="width:560px; max-width:92%; background:#f7f4ec; border:1px solid #1f1d1a;">
+            <tr>
+              <td style="padding:24px 32px; border-bottom:1px solid #1f1d1a;">
+                <span style="font-family:Arial,Helvetica,sans-serif; font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:#111111; font-weight:bold;">IIEVI</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:32px;">
+                {% block content %}{% endblock %}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 32px; border-top:1px solid #1f1d1a; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.5; color:#8a857c;">
+                Sent by IIEVI on behalf of {{ business_name|default('your business') }}.{% if dashboard_url %} <a href="{{ dashboard_url }}" style="color:#c8462c; text-decoration:none;">Open your dashboard</a>.{% endif %}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

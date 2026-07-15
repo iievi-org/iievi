@@ -12,7 +12,7 @@ Conventions (enforced, see .claude/memory/quality-checks.md):
 
 import enum
 import uuid
-from datetime import date, datetime
+from datetime import date, datetime, time
 
 from sqlalchemy import (
     TIMESTAMP,
@@ -25,6 +25,7 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    Time,
     UniqueConstraint,
     text,
 )
@@ -137,6 +138,35 @@ class IdempotencyStatus(enum.StrEnum):
     FAILED = "failed"
 
 
+class ConversationState(enum.StrEnum):
+    """AI conversation stage — the grounded conversation state machine (Prompt 7).
+
+    Distinct from Lead.status (the CRM pipeline view): the state machine maps
+    each transition onto `status` for the leads UI/analytics. LOST is not fully
+    terminal — a lost lead can be re-engaged (LOST -> GREETED) by a scheduled
+    follow-up 24-48h later or by the lead replying.
+    """
+
+    NEW = "new"
+    GREETED = "greeted"
+    QUALIFYING = "qualifying"
+    PITCH_SENT = "pitch_sent"
+    BOOKING_OFFERED = "booking_offered"
+    BOOKED = "booked"
+    HANDED_OFF = "handed_off"
+    LOST = "lost"
+
+
+class NotificationType(enum.StrEnum):
+    NEW_LEAD = "new_lead"
+    POST_PUBLISHED = "post_published"
+    POST_FAILED = "post_failed"
+    PAYMENT_FAILED = "payment_failed"
+    CREDENTIAL_EXPIRED = "credential_expired"
+    AI_HANDOFF = "ai_handoff"
+    WEEKLY_SUMMARY = "weekly_summary"
+
+
 # ---------------------------------------------------------------------------
 # Base + mixins
 # ---------------------------------------------------------------------------
@@ -210,6 +240,10 @@ class User(Base):
     )
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default=text("true"))
     last_login_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    # Owner's WhatsApp number for PLATFORM notifications (e.g. handoff
+    # summaries), sent via the platform's own WhatsApp number — not the
+    # tenant's lead-facing number.
+    notification_whatsapp: Mapped[str | None] = mapped_column(String(32), nullable=True)
     created_at: Mapped[datetime] = _created_at()
     updated_at: Mapped[datetime] = _updated_at()
 
@@ -243,6 +277,11 @@ class BusinessProfile(Base):
     policies: Mapped[dict[str, object]] = mapped_column(
         JSONB, default=dict, server_default=text("'{}'")
     )
+    # Self-booking link the AI surfaces at BOOKING_OFFERED (Prompt 7).
+    booking_url: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+    # Contact details the AI may share — absence means "invent nothing".
+    contact_phone: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    contact_email: Mapped[str | None] = mapped_column(String(320), nullable=True)
     created_at: Mapped[datetime] = _created_at()
     updated_at: Mapped[datetime] = _updated_at()
 
@@ -300,6 +339,11 @@ class BrandKit(Base):
     id: Mapped[uuid.UUID] = _uuid_pk()
     tenant_id: Mapped[uuid.UUID] = _tenant_fk()
     logo_url: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+    # R2 object key — signed URLs are generated on demand, never stored
+    logo_r2_key: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    # Pre-computed by the compute_nanobanana_style_prompt Celery task
+    # [CANVA_NEXT_UPDATE] replaced by a Canva brand-kit reference when Canva lands
+    nanobanana_style_prompt: Mapped[str | None] = mapped_column(Text, nullable=True)
     colors: Mapped[dict[str, object]] = mapped_column(
         JSONB, default=dict, server_default=text("'{}'")
     )
@@ -322,7 +366,7 @@ class ApiCredential(Base):
 
     id: Mapped[uuid.UUID] = _uuid_pk()
     tenant_id: Mapped[uuid.UUID] = _tenant_fk()
-    service: Mapped[str] = mapped_column(String(64))  # anthropic | nanobanana | meta | ...
+    service: Mapped[str] = mapped_column(String(64))  # gemini | nanobanana | meta | ...
     # AES-256-GCM, format base64(iv):base64(ciphertext+tag) — see core/security.py
     encrypted_key: Mapped[str] = mapped_column(Text)
     meta: Mapped[dict[str, object]] = mapped_column(
@@ -355,6 +399,7 @@ class Lead(Base):
     __table_args__ = (
         UniqueConstraint("tenant_id", "platform_id", name="uq_leads_tenant_platform_id"),
         Index("ix_leads_tenant_status", "tenant_id", "status"),
+        Index("ix_leads_tenant_conversation_state", "tenant_id", "conversation_state"),
     )
 
     id: Mapped[uuid.UUID] = _uuid_pk()
@@ -377,6 +422,24 @@ class Lead(Base):
     email: Mapped[str | None] = mapped_column(String(320), nullable=True)
     # Drives the WhatsApp 24-hour messaging window check
     last_inbound_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    # True = a human has taken over; the AI must not reply to this lead
+    manual_mode: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))
+    # AI conversation stage (Prompt 7 state machine) — distinct from `status`,
+    # which is the CRM pipeline view. Transitions are mapped onto `status`.
+    conversation_state: Mapped[ConversationState] = mapped_column(
+        Enum(
+            ConversationState,
+            name="conversation_state",
+            values_callable=lambda e: [m.value for m in e],
+        ),
+        default=ConversationState.NEW,
+        server_default=ConversationState.NEW.value,
+    )
+    # Celery task IDs for the active outreach sequence — revoked when the lead
+    # responds or a human takes over (conversations/outreach_service.py).
+    follow_up_task_ids: Mapped[list[str]] = mapped_column(
+        JSONB, default=list, server_default=text("'[]'")
+    )
     meta: Mapped[dict[str, object]] = mapped_column(
         "metadata", JSONB, default=dict, server_default=text("'{}'")
     )
@@ -435,6 +498,14 @@ class Post(Base):
         JSONB, default=dict, server_default=text("'{}'")
     )
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Generation artifacts: topic, caption, hashtags, call_to_action,
+    # image_description, template_style, image R2 key — written by the
+    # post generation Celery chain.
+    meta: Mapped[dict[str, object]] = mapped_column(
+        "metadata", JSONB, default=dict, server_default=text("'{}'")
+    )
+    # Set once by the ad creation task; its presence makes ad creation idempotent
+    ad_campaign_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     created_at: Mapped[datetime] = _created_at()
     updated_at: Mapped[datetime] = _updated_at()
 
@@ -499,10 +570,9 @@ class AuditLog(Base):
     )
 
     id: Mapped[uuid.UUID] = _uuid_pk()
-    # Nullable: platform-level actions (e.g. feature flag change) have no tenant
-    tenant_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("tenants.id", ondelete="SET NULL"), nullable=True
-    )
+    # Bare UUID, deliberately NO foreign key: audit rows are immutable history
+    # (append-only trigger) — an FK ON DELETE action would need to UPDATE them.
+    tenant_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
     # Nullable: system actions (Celery tasks, webhooks) have no acting user
     actor_user_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
     actor_ip: Mapped[str | None] = mapped_column(INET, nullable=True)
@@ -568,6 +638,10 @@ class WebhookEvent(Base):
         default=IdempotencyStatus.PENDING,
         server_default=IdempotencyStatus.PENDING.value,
     )
+    # Raw event payload — what the admin replay endpoint re-enqueues
+    payload: Mapped[dict[str, object]] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'")
+    )
     processed_at: Mapped[datetime | None] = mapped_column(nullable=True)
     received_at: Mapped[datetime] = _created_at()
 
@@ -587,12 +661,109 @@ class NotificationPreference(Base):
     whatsapp_enabled: Mapped[bool] = mapped_column(
         Boolean, default=True, server_default=text("true")
     )
-    # Per-event-type overrides, e.g. {"new_lead": {"email": false}}
+    in_app_enabled: Mapped[bool] = mapped_column(Boolean, default=True, server_default=text("true"))
+    # Per-event-type × per-channel overrides, e.g. {"new_lead": {"email": false}}
     overrides: Mapped[dict[str, object]] = mapped_column(
         JSONB, default=dict, server_default=text("'{}'")
     )
+    # Quiet hours: notifications due inside the window are deferred until it
+    # ends. Wall-clock times in the owner's timezone (IST by product default).
+    quiet_hours_start: Mapped[time | None] = mapped_column(Time(), nullable=True)
+    quiet_hours_end: Mapped[time | None] = mapped_column(Time(), nullable=True)
+    # ISO weekday numbers quiet hours apply to (1=Mon..7=Sun); empty = every day
+    quiet_hours_days: Mapped[list[int]] = mapped_column(
+        JSONB, default=list, server_default=text("'[]'")
+    )
     created_at: Mapped[datetime] = _created_at()
     updated_at: Mapped[datetime] = _updated_at()
+
+
+class Notification(Base):
+    """In-app notification for the dashboard bell. Tenant-scoped (RLS)."""
+
+    __tablename__ = "notifications"
+    __table_args__ = (Index("ix_notifications_user_unread", "user_id", "read_at"),)
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+    tenant_id: Mapped[uuid.UUID] = _tenant_fk()
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    type: Mapped[NotificationType] = mapped_column(
+        Enum(
+            NotificationType,
+            name="notification_type",
+            values_callable=lambda e: [m.value for m in e],
+        )
+    )
+    title: Mapped[str] = mapped_column(String(255))
+    body: Mapped[str] = mapped_column(Text)
+    action_url: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+    # NULL = unread; set to now() when the user reads it.
+    read_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    created_at: Mapped[datetime] = _created_at()
+
+
+class OnboardingSession(Base):
+    """DB fallback for Redis-held onboarding sessions. NO RLS — onboarding
+    happens BEFORE a tenant account exists (session-token addressed)."""
+
+    __tablename__ = "onboarding_sessions"
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+    session_token: Mapped[str] = mapped_column(String(64), unique=True)
+    current_stage: Mapped[str] = mapped_column(String(32))
+    data: Mapped[dict[str, object]] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'")
+    )
+    tenant_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    # Cleanup boundary for the daily expired-session sweep
+    expires_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    created_at: Mapped[datetime] = _created_at()
+    updated_at: Mapped[datetime] = _updated_at()
+
+
+class OnboardingEvent(Base):
+    """Lightweight onboarding analytics (stage completions, drop-offs).
+    NO RLS — recorded before any tenant exists."""
+
+    __tablename__ = "onboarding_events"
+    __table_args__ = (Index("ix_onboarding_events_token", "session_token", "created_at"),)
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+    session_token: Mapped[str] = mapped_column(String(64))
+    stage: Mapped[str] = mapped_column(String(32))
+    event_type: Mapped[str] = mapped_column(String(48))
+    meta: Mapped[dict[str, object]] = mapped_column(
+        "metadata", JSONB, default=dict, server_default=text("'{}'")
+    )
+    created_at: Mapped[datetime] = _created_at()
+
+
+class FailedTask(Base):
+    """Operational record of a Celery task that exhausted its retries.
+
+    NO RLS — this is the platform team's investigation table; rows exist for
+    tasks with no tenant context at all (beat jobs, webhook fan-out).
+    """
+
+    __tablename__ = "failed_tasks"
+    __table_args__ = (Index("ix_failed_tasks_created", "created_at"),)
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+    task_id: Mapped[str] = mapped_column(String(155), index=True)
+    task_name: Mapped[str] = mapped_column(String(255))
+    queue: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    # Bare UUID, no FK: failure records must survive tenant deletion
+    tenant_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    args: Mapped[dict[str, object]] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'")
+    )
+    error: Mapped[str] = mapped_column(Text)
+    retries: Mapped[int] = mapped_column(Integer, default=0, server_default=text("0"))
+    # True once the task has been parked on the dead letter queue
+    is_dlq: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))
+    created_at: Mapped[datetime] = _created_at()
 
 
 # Tables that get RLS policies in the apply_rls migration. Order matters for
@@ -612,4 +783,5 @@ TENANT_SCOPED_TABLES: tuple[str, ...] = (
     "subscriptions",
     "monthly_usage",
     "notification_preferences",
+    "notifications",
 )

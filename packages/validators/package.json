@@ -2,13 +2,12 @@
   "name": "@iievi/validators",
   "version": "0.1.0",
   "private": true,
-  "description": "Zod schemas for all forms and API contracts. Portable — no DOM, no Next.js imports.",
+  "description": "Zod schemas for all forms and API contracts. Portable \u2014 no DOM, no Next.js imports.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint src"
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "zod": "^3.23.8"

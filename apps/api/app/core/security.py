@@ -150,7 +150,8 @@ class JWTPayload(BaseModel):
     sub: str  # user_id
     tid: str  # tenant_id
     plan: str
-    admin: bool = False
+    role: str = "owner"  # RBAC role within the tenant
+    admin: bool = False  # platform admin (IIEVI staff), NOT tenant admin
     jti: str
     exp: int
     iat: int
