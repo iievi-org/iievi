@@ -1,0 +1,8 @@
+{% extends "_base.html" %}
+{% block content %}
+<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#c8462c; margin:0 0 10px;">Couldn't publish</p>
+<h1 style="font-family:Georgia,'Times New Roman',serif; font-size:26px; line-height:1.25; color:#111111; font-weight:normal; margin:0 0 16px;">A post couldn't go out on {{ platform }}</h1>
+<p style="font-family:Georgia,'Times New Roman',serif; font-size:16px; line-height:1.55; color:#3a3733; margin:0 0 16px;">We tried to publish your scheduled post for {{ business_name }} on {{ platform }}, but it didn't go through.</p>
+<div style="border:1px solid #1f1d1a; background:#f1ede3; padding:16px; margin:0 0 24px; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.5; color:#3a3733;">{{ reason }}</div>
+<p style="margin:0;"><a href="{{ dashboard_url }}" style="display:inline-block; padding:13px 22px; background:#111111; color:#f7f4ec; text-decoration:none; font-family:Arial,Helvetica,sans-serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;">Review &amp; retry</a></p>
+{% endblock %}

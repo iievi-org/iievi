@@ -62,6 +62,19 @@ class Settings(BaseSettings):
     langfuse_public_key: str = Field(default="", alias="LANGFUSE_PUBLIC_KEY")
     langfuse_secret_key: str = Field(default="", alias="LANGFUSE_SECRET_KEY")
     langfuse_host: str = Field(default="https://cloud.langfuse.com", alias="LANGFUSE_HOST")
+    gemini_api_key: str = Field(default="", alias="GEMINI_API_KEY")
+    langfuse_public_key: str = Field(default="", alias="LANGFUSE_PUBLIC_KEY")
+    langfuse_secret_key: str = Field(default="", alias="LANGFUSE_SECRET_KEY")
+    langfuse_host: str = Field(default="https://cloud.langfuse.com", alias="LANGFUSE_HOST")
+    # Per-tenant daily AI spend ceiling (USD) — exceeded → warn + notify ops
+    ai_daily_budget_usd: float = Field(default=5.0, alias="AI_DAILY_BUDGET_USD")
+
+    # --- Webhook signing secrets -------------------------------------------
+    meta_app_secret: str = Field(default="", alias="META_APP_SECRET")
+    # Echoed back in Meta's GET subscription-verify handshake
+    meta_webhook_verify_token: str = Field(default="", alias="META_WEBHOOK_VERIFY_TOKEN")
+    razorpay_webhook_secret: str = Field(default="", alias="RAZORPAY_WEBHOOK_SECRET")
+    stripe_webhook_secret: str = Field(default="", alias="STRIPE_WEBHOOK_SECRET")
 
     # --- Cloudflare R2 (S3-compatible media storage) ------------------------
     r2_account_id: str = Field(default="", alias="R2_ACCOUNT_ID")
@@ -73,7 +86,22 @@ class Settings(BaseSettings):
     sentry_dsn: str = Field(default="", alias="SENTRY_DSN")
     axiom_token: str = Field(default="", alias="AXIOM_TOKEN")
     axiom_dataset: str = Field(default="iievi-api", alias="AXIOM_DATASET")
+    # Axiom query API base — the admin log-query endpoint hits {url}/v1/datasets.
+    axiom_url: str = Field(default="https://api.axiom.co", alias="AXIOM_URL")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
+
+    # --- Notifications & platform outbound channels -----------------------
+    # Transactional email (owner notifications, weekly reports) via Resend.
+    resend_api_key: str = Field(default="", alias="RESEND_API_KEY")
+    resend_from_email: str = Field(
+        default="IIEVI <notifications@iievi.app>", alias="RESEND_FROM_EMAIL"
+    )
+    # Platform-owned WhatsApp number for OWNER notifications (handoff summaries).
+    # Distinct from each tenant's own lead-facing WhatsApp credential.
+    platform_whatsapp_token: str = Field(default="", alias="PLATFORM_WHATSAPP_TOKEN")
+    platform_whatsapp_phone_id: str = Field(default="", alias="PLATFORM_WHATSAPP_PHONE_ID")
+    # Dashboard base URL for notification/email deep links.
+    dashboard_url: str = Field(default="http://localhost:3000", alias="DASHBOARD_URL")
 
     # --- CORS -------------------------------------------------------------
     cors_origins: str = Field(default="http://localhost:3000", alias="CORS_ORIGINS")

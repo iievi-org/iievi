@@ -14,6 +14,9 @@ Install these before anything else:
 | Doppler CLI | latest | `brew install dopplerhq/cli/doppler` |
 
 You also need to be invited to the Doppler `iievi` project (ask a maintainer).
+If you are setting up the Doppler config itself, see
+[docs/infra/doppler.md](docs/infra/doppler.md) — it lists every secret and the
+exact steps to acquire each one (Gemini API key, LangFuse, R2, …).
 
 ## First-time setup — exactly 6 commands
 

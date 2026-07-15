@@ -45,6 +45,8 @@ async def _require_db(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.modules.onboarding import session_service
 
     core_redis.get_redis.cache_clear()
+    from app.modules.onboarding import session_service
+
     monkeypatch.setattr(session_service, "get_redis", lambda: fake)
 
     # Onboarding persistence + hooks enqueue Celery tasks; run tests brokerless

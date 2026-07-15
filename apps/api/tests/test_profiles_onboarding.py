@@ -92,6 +92,7 @@ async def test_missing_fields_rejected_before_any_network_call() -> None:
 
 
 async def test_invalid_anthropic_key_raises_verification_error(
+async def test_invalid_gemini_key_raises_verification_error(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """DoD: credential saving with an invalid API key returns
@@ -101,6 +102,7 @@ async def test_invalid_anthropic_key_raises_verification_error(
     async def fake_get(self: httpx.AsyncClient, url: str, **kwargs: object) -> httpx.Response:
         return httpx.Response(
             401, json={"error": "invalid x-api-key"}, request=httpx.Request("GET", url)
+            400, json={"error": "API key not valid"}, request=httpx.Request("GET", url)
         )
 
     monkeypatch.setattr(httpx.AsyncClient, "get", fake_get)
@@ -114,6 +116,11 @@ async def test_invalid_anthropic_key_raises_verification_error(
             uuid.uuid4(),
             "anthropic",
             {"api_key": "sk-ant-invalid"},
+    with pytest.raises(CredentialVerificationError, match="Gemini rejected"):
+        await credential_service.save_credential(
+            uuid.uuid4(),
+            "gemini",
+            {"api_key": "AIza-invalid"},
             session=_ExplodingSession(),  # type: ignore[arg-type]
         )
 

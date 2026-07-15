@@ -7,6 +7,15 @@ after_profile_write(changed_fields, tenant_id) dispatches:
                            [CANVA_NEXT_UPDATE] will call Canva brand kit update API
 - working hours updated  → NO downstream effect (AI reads hours fresh per call)
 - credential revoked     → cancel_pending_outreach_tasks_for_tenant
+- ANY change              → invalidate the ctx:{tenant_id} AI context cache
+                            (stale context is worse than no cache — the AI
+                            would quote old prices for up to 5 minutes)
+- services updated        → compute_nanobanana_style_prompt
+                            [CANVA_NEXT_UPDATE] will also refresh Canva templates
+- brand colours updated   → compute_nanobanana_style_prompt
+                            [CANVA_NEXT_UPDATE] will call Canva brand kit update API
+- working hours updated   → context invalidation only (AI reads hours per call)
+- credential revoked      → cancel_pending_outreach_tasks_for_tenant
 
 Enqueue failures are logged, never raised — a profile save must not fail
 because the broker is down.
@@ -23,6 +32,14 @@ _STYLE_TRIGGERS = frozenset({"services", "colors", "fonts", "brand_identity"})
 
 def after_profile_write(changed_fields: Iterable[str], tenant_id: uuid.UUID) -> None:
     changed = set(changed_fields)
+    try:
+        # Immediate cache invalidation FIRST — this must happen even if the
+        # Celery broker is down. Sync client: a sub-millisecond DEL.
+        from app.core.redis import get_sync_redis
+
+        get_sync_redis().delete(f"ctx:{tenant_id}")
+    except Exception:  # noqa: BLE001
+        logger.warning("context cache invalidation failed", extra={"tenant_id": str(tenant_id)})
     try:
         if changed & _STYLE_TRIGGERS:
             from app.worker.tasks import compute_nanobanana_style_prompt

@@ -3,6 +3,9 @@
 Object keys: {resource_type}/{tenant_id}/{year}/{month}/{uuid}.{ext}
 Only object KEYS are stored in the database — signed URLs are generated
 fresh on demand (15 min for display, 10 min for social publishing).
+fresh on demand. Publishing URLs get 15 minutes: Meta fetches the image
+AFTER receiving the URL (not instantly), and the spec requires ≥10 minutes
+of validity at hand-off time.
 
 boto3 is synchronous; every call is wrapped in asyncio.to_thread so the
 event loop never blocks on network I/O.
@@ -25,6 +28,7 @@ logger = logging.getLogger(__name__)
 
 DISPLAY_URL_TTL_S = 15 * 60
 PUBLISH_URL_TTL_S = 10 * 60
+PUBLISH_URL_TTL_S = 15 * 60
 
 
 def build_object_key(resource_type: str, tenant_id: uuid.UUID, extension: str) -> str:

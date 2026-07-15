@@ -46,11 +46,15 @@ def get_engine() -> AsyncEngine:
     run on different event loops, and a pooled asyncpg connection is bound to
     the loop that created it. NullPool opens/closes per operation instead.
     """
+    # echo in development ONLY: every SQL statement logged for profiling;
+    # in production this would leak parameters into logs and drown Axiom.
+    echo = settings.environment.value == "development" and "PYTEST_VERSION" not in os.environ
     if "PYTEST_VERSION" in os.environ:
         engine = create_async_engine(settings.pooled_database_url, poolclass=NullPool)
     else:
         engine = create_async_engine(
             settings.pooled_database_url,
+            echo=echo,
             pool_size=10,
             max_overflow=5,
             pool_timeout=30,

@@ -9,3 +9,7 @@ from contextvars import ContextVar
 
 request_id_var: ContextVar[str | None] = ContextVar("request_id", default=None)
 tenant_id_var: ContextVar[str | None] = ContextVar("tenant_id", default=None)
+# Set per Celery task (task_prerun) so every worker log line is filterable by
+# task, alongside the request_id propagated from the originating HTTP request.
+task_name_var: ContextVar[str | None] = ContextVar("task_name", default=None)
+task_id_var: ContextVar[str | None] = ContextVar("task_id", default=None)

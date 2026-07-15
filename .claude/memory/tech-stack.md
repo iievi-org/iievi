@@ -9,8 +9,8 @@
   - Exception: `platform_identifiers` has NO RLS (webhook routing pre-tenant-context)
 - Celery + Redis (broker and result backend); six named queues:
   `ai_conversations`, `post_publishing`, `creative_generation`, `lead_outreach`, `ad_management`, `usage_tracking`
-- AI: Anthropic Python SDK — Claude Haiku 3.5 (`claude-haiku-3-5-20251001`) for conversations, Claude Sonnet 4 (`claude-sonnet-4-20250514`) for generation; LangFuse traces every AI call
-- Images: NanoBanana Pro API. Social APIs: httpx (async)
+- AI: google-genai SDK (GEMINI_API_KEY) — Gemini 2.5 Flash-Lite (`gemini-2.5-flash-lite`) for conversations, Gemini 2.5 Flash (`gemini-2.5-flash`) for generation/extraction, Gemini 2.5 Flash Image (`gemini-2.5-flash-image`) for images; LangFuse traces every AI call
+- Social APIs: httpx (async)
 - Payments: Razorpay (India) + Stripe (international) — hosted pages only (PCI DSS SAQ-A)
 - Secrets: Doppler. Errors: Sentry. Logs: Axiom
 - Infra: Hetzner CX32 (4 vCPU / 8GB, Singapore) — nginx, Supervisor, Redis
@@ -40,7 +40,7 @@
 
 ## Plans
 Trial (free, limited) → Starter ₹2,999/mo → Growth ₹6,999/mo → Agency ₹14,999/mo.
-Customers bring their own Anthropic / NanoBanana Pro / social credentials.
+Customers bring their own Gemini (text + image) / social credentials.
 
 ## Canva
 Platform-owned Canva API key comes in the NEXT update. Mark integration points with

@@ -55,6 +55,8 @@ async def _require_db(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.core import redis as core_redis
 
     core_redis.get_redis.cache_clear()
+    # get_redis caches per event loop (see app/core/redis.py) — fresh
+    # TestClient loops get fresh clients automatically, no reset needed.
 
 
 @pytest.fixture()

@@ -1,4 +1,5 @@
 """Claude Sonnet 4 structured extraction for onboarding answers.
+"""Gemini 2.5 Flash structured extraction for onboarding answers.
 
 Contract with the model (enforced by prompt AND by Pydantic validation):
 - extract ONLY what the user explicitly said — never invent
@@ -97,6 +98,7 @@ async def extract(
         system=system,
         user_message=user_answer,
         model=ai.SONNET_MODEL,
+        model=ai.FLASH_MODEL,
         max_tokens=1024,
         trace_name=f"onboarding-extract-{kind}",
         session_id=session_token,

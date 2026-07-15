@@ -12,7 +12,7 @@ import sys
 from datetime import UTC, datetime
 from typing import override
 
-from app.core.context import request_id_var, tenant_id_var
+from app.core.context import request_id_var, task_id_var, task_name_var, tenant_id_var
 
 _RESERVED_ATTRS = frozenset(logging.LogRecord("", 0, "", 0, "", None, None).__dict__.keys()) | {
     "message",
@@ -34,6 +34,14 @@ class JsonFormatter(logging.Formatter):
             "tenant_id": tenant_id_var.get(),
             "message": record.getMessage(),
         }
+        # Task identifiers appear only on worker logs (set by task_prerun), so
+        # API log lines aren't cluttered with null task fields.
+        task_name = task_name_var.get()
+        if task_name is not None:
+            entry["task_name"] = task_name
+        task_id = task_id_var.get()
+        if task_id is not None:
+            entry["task_id"] = task_id
         if record.exc_info and record.exc_info[0] is not None:
             entry["exception"] = self.formatException(record.exc_info)
         for key, value in record.__dict__.items():
