@@ -41,6 +41,8 @@ from app.modules.auth.router import router as auth_router
 from app.modules.billing.router import router as billing_router
 from app.modules.credentials.router import router as credentials_router
 from app.modules.flags.router import router as flags_router
+from app.modules.onboarding.router import router as onboarding_router
+from app.modules.profiles.router import router as profiles_router
 from app.modules.leads.router import router as leads_router
 from app.modules.logs.admin_router import router as logs_admin_router
 from app.modules.notifications.preferences_router import router as notification_prefs_router
@@ -156,6 +158,7 @@ def create_app() -> FastAPI:
     v1.include_router(profiles_router)
     v1.include_router(credentials_router)
     v1.include_router(analytics_router)
+    app.include_router(v1)
     v1.include_router(posts_router)
     v1.include_router(leads_router)
     v1.include_router(notifications_router)
