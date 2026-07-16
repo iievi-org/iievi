@@ -12,21 +12,71 @@ export const Route = createFileRoute("/_marketing/blog")({
   head: () => ({
     meta: [
       { title: "Blog — IIEVI" },
-      { name: "description", content: "Field notes on Global service businesses, WhatsApp commerce, and building calm AI." },
+      {
+        name: "description",
+        content:
+          "Field notes on Global service businesses, WhatsApp commerce, and building calm AI.",
+      },
       { property: "og:title", content: "Blog — IIEVI" },
-      { property: "og:description", content: "Field notes on Global service businesses and WhatsApp AI." },
+      {
+        property: "og:description",
+        content: "Field notes on Global service businesses and WhatsApp AI.",
+      },
     ],
   }),
   component: BlogIndex,
 });
 
 const POSTS = [
-  { slug: "five-second-rule", cat: "Playbook", title: "The 5-second rule that decides whether you keep the lead", excerpt: "67% of customers go to a competitor if you don't reply in 5 minutes. The math is brutal.", read: 6, featured: true },
-  { slug: "hinglish-ai", cat: "Engineering", title: "Why most AI bots fail in Multilinual Markets — and how we fixed it", excerpt: "Code-mixed Hindi-English is the default register of Global customer service. Most LLMs treat it as noise.", read: 9 },
-  { slug: "diwali-bookings", cat: "Case Study", title: "How Glow Salon handled 4× Diwali bookings without hiring", excerpt: "A 14-day run-up, an AI on WhatsApp, and an inbox that never slept. Here's the playbook.", read: 7 },
-  { slug: "review-timing", cat: "Playbook", title: "The exact moment to ask for a Google review", excerpt: "Not too early, not too late. Our data on 47,000 review requests shows the window is tighter than you think.", read: 5 },
-  { slug: "voice-notes", cat: "Engineering", title: "Building voice-note understanding for Global English", excerpt: "Whisper out of the box misses 40% of Global English voice notes. Here's our fine-tuning approach.", read: 11 },
-  { slug: "missed-call-funnel", cat: "Playbook", title: "Turn missed calls into bookings — the WhatsApp bridge", excerpt: "30% of small-business missed calls are real intent. A two-line WhatsApp autoresponder converts them.", read: 4 },
+  {
+    slug: "five-second-rule",
+    cat: "Playbook",
+    title: "The 5-second rule that decides whether you keep the lead",
+    excerpt:
+      "67% of customers go to a competitor if you don't reply in 5 minutes. The math is brutal.",
+    read: 6,
+    featured: true,
+  },
+  {
+    slug: "hinglish-ai",
+    cat: "Engineering",
+    title: "Why most AI bots fail in Multilinual Markets — and how we fixed it",
+    excerpt:
+      "Code-mixed Hindi-English is the default register of Global customer service. Most LLMs treat it as noise.",
+    read: 9,
+  },
+  {
+    slug: "diwali-bookings",
+    cat: "Case Study",
+    title: "How Glow Salon handled 4× Diwali bookings without hiring",
+    excerpt:
+      "A 14-day run-up, an AI on WhatsApp, and an inbox that never slept. Here's the playbook.",
+    read: 7,
+  },
+  {
+    slug: "review-timing",
+    cat: "Playbook",
+    title: "The exact moment to ask for a Google review",
+    excerpt:
+      "Not too early, not too late. Our data on 47,000 review requests shows the window is tighter than you think.",
+    read: 5,
+  },
+  {
+    slug: "voice-notes",
+    cat: "Engineering",
+    title: "Building voice-note understanding for Global English",
+    excerpt:
+      "Whisper out of the box misses 40% of Global English voice notes. Here's our fine-tuning approach.",
+    read: 11,
+  },
+  {
+    slug: "missed-call-funnel",
+    cat: "Playbook",
+    title: "Turn missed calls into bookings — the WhatsApp bridge",
+    excerpt:
+      "30% of small-business missed calls are real intent. A two-line WhatsApp autoresponder converts them.",
+    read: 4,
+  },
 ];
 
 const CATS = ["All", "Playbook", "Engineering", "Case Study"];
@@ -42,7 +92,9 @@ function BlogIndex() {
     <>
       <Container>
         <div className="pt-16 md:pt-24 pb-12 max-w-3xl">
-          <FadeIn><SectionLabel>{t("Field Notes")}</SectionLabel></FadeIn>
+          <FadeIn>
+            <SectionLabel>{t("Field Notes")}</SectionLabel>
+          </FadeIn>
           <FadeIn delay={0.05}>
             <h1 className="mt-6 font-display text-[44px] md:text-display-lg text-ink leading-[0.96]">
               {t("Blogs")}
@@ -74,11 +126,7 @@ function BlogIndex() {
       <Rule className="mt-16" />
       <Container>
         <div className="py-6">
-          <Tabs
-            value={cat}
-            onChange={setCat}
-            options={CATS.map((c) => ({ value: c, label: c }))}
-          />
+          <Tabs value={cat} onChange={setCat} options={CATS.map((c) => ({ value: c, label: c }))} />
         </div>
       </Container>
       <Rule />
@@ -96,7 +144,9 @@ function BlogIndex() {
                     </h3>
                     <p className="mt-4 text-body-sm text-graphite">{p.excerpt}</p>
                   </div>
-                  <p className="mt-6 font-mono text-mono-sm text-stone uppercase">{p.read} min read</p>
+                  <p className="mt-6 font-mono text-mono-sm text-stone uppercase">
+                    {p.read} min read
+                  </p>
                 </div>
               </Link>
             </FadeIn>

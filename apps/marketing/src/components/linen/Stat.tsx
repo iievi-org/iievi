@@ -27,7 +27,9 @@ export function Stat({ value, label }: StatProps) {
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const reduce = useReducedMotion();
   const parsed = parseValue(value);
-  const [display, setDisplay] = useState(parsed.isNumeric ? `${parsed.prefix}0${parsed.suffix}` : value);
+  const [display, setDisplay] = useState(
+    parsed.isNumeric ? `${parsed.prefix}0${parsed.suffix}` : value,
+  );
 
   useEffect(() => {
     if (!inView || !parsed.isNumeric) {

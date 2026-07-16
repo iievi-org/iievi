@@ -1,12 +1,6 @@
 """Profile change hooks — downstream effects of profile writes.
 
 after_profile_write(changed_fields, tenant_id) dispatches:
-- services updated       → compute_nanobanana_style_prompt
-                           [CANVA_NEXT_UPDATE] will also refresh Canva templates
-- brand colours updated  → compute_nanobanana_style_prompt
-                           [CANVA_NEXT_UPDATE] will call Canva brand kit update API
-- working hours updated  → NO downstream effect (AI reads hours fresh per call)
-- credential revoked     → cancel_pending_outreach_tasks_for_tenant
 - ANY change              → invalidate the ctx:{tenant_id} AI context cache
                             (stale context is worse than no cache — the AI
                             would quote old prices for up to 5 minutes)

@@ -5,7 +5,6 @@ import { Container } from "@/components/linen/Container";
 import { ButtonLink } from "@/components/linen/Button";
 import { ThemeToggle } from "@/components/linen/ThemeToggle";
 
-
 const NAV = [
   { to: "/features", label: "Features" },
   { to: "/pricing", label: "Pricing" },
@@ -63,8 +62,12 @@ export function Nav() {
           </nav>
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            <ButtonLink to="/register" variant="ghost">Login</ButtonLink>
-            <ButtonLink to="/register" variant="primary">Start Free</ButtonLink>
+            <ButtonLink to="/register" variant="ghost">
+              Login
+            </ButtonLink>
+            <ButtonLink to="/register" variant="primary">
+              Start Free
+            </ButtonLink>
           </div>
 
           <button
@@ -93,13 +96,18 @@ export function Nav() {
               ))}
               <div className="flex flex-col gap-3 pt-8">
                 <div className="flex items-center justify-between border border-hairline px-4 py-3">
-                  <span className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">Theme</span>
+                  <span className="font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">
+                    Theme
+                  </span>
                   <ThemeToggle />
                 </div>
-                <ButtonLink to="/register" variant="ghost" onClick={() => setOpen(false)}>Login</ButtonLink>
-                <ButtonLink to="/register" variant="primary" onClick={() => setOpen(false)}>Start Free</ButtonLink>
+                <ButtonLink to="/register" variant="ghost" onClick={() => setOpen(false)}>
+                  Login
+                </ButtonLink>
+                <ButtonLink to="/register" variant="primary" onClick={() => setOpen(false)}>
+                  Start Free
+                </ButtonLink>
               </div>
-
             </div>
           </Container>
         </div>

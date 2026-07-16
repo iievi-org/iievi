@@ -58,10 +58,6 @@ class Settings(BaseSettings):
 
     # --- Platform AI (onboarding extraction runs on the PLATFORM's key;
     # customer-facing AI uses each tenant's own stored credential) ----------
-    anthropic_api_key: str = Field(default="", alias="ANTHROPIC_API_KEY")
-    langfuse_public_key: str = Field(default="", alias="LANGFUSE_PUBLIC_KEY")
-    langfuse_secret_key: str = Field(default="", alias="LANGFUSE_SECRET_KEY")
-    langfuse_host: str = Field(default="https://cloud.langfuse.com", alias="LANGFUSE_HOST")
     gemini_api_key: str = Field(default="", alias="GEMINI_API_KEY")
     langfuse_public_key: str = Field(default="", alias="LANGFUSE_PUBLIC_KEY")
     langfuse_secret_key: str = Field(default="", alias="LANGFUSE_SECRET_KEY")

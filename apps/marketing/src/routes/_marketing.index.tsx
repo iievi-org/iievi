@@ -1,5 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Play, Star, AlertTriangle, ArrowRight, Minus, Check, Sparkles, CalendarClock, RefreshCw, Lock, ShieldCheck, Database, MapPin, GraduationCap } from "lucide-react";
+import {
+  Play,
+  Star,
+  AlertTriangle,
+  ArrowRight,
+  Minus,
+  Check,
+  Sparkles,
+  CalendarClock,
+  RefreshCw,
+  Lock,
+  ShieldCheck,
+  Database,
+  MapPin,
+  GraduationCap,
+} from "lucide-react";
 import { Container, Section } from "@/components/linen/Container";
 import { Rule } from "@/components/linen/Rule";
 import { Pill } from "@/components/linen/Pill";
@@ -18,7 +33,6 @@ import { PlaybookProgress } from "@/components/linen/PlaybookProgress";
 import { useRef, useState, useEffect } from "react";
 import { useInView } from "framer-motion";
 import { useTranslation } from "react-i18next";
-
 
 export const Route = createFileRoute("/_marketing/")({
   head: () => ({
@@ -53,26 +67,21 @@ const businesses = [
 const painPoints = [
   {
     title: "Leads ghost you within minutes",
-    body:
-      "67% of customers go to your competitor if you don't reply in 5 minutes. At 2 AM, on Diwali, during a haircut — you can't always reply.",
+    body: "67% of customers go to your competitor if you don't reply in 5 minutes. At 2 AM, on Diwali, during a haircut — you can't always reply.",
   },
   {
     title: "Bookings live in three places",
-    body:
-      "WhatsApp, Instagram DMs, phone calls — and a notebook at the counter. Double bookings and no-shows are eating your margin.",
+    body: "WhatsApp, Instagram DMs, phone calls — and a notebook at the counter. Double bookings and no-shows are eating your margin.",
   },
   {
     title: "Reviews never get asked for",
-    body:
-      "You delivered great service. You forgot to ask for a Google review. Your competitor with 4.2★ is outranking you on Maps.",
+    body: "You delivered great service. You forgot to ask for a Google review. Your competitor with 4.2★ is outranking you on Maps.",
   },
   {
     title: "Posting on 4 platforms is a full-time job",
-    body:
-      "Instagram, Meta, LinkedIn, TikTok — each needs its own copy, its own image, its own time. Most weeks, nothing goes out.",
+    body: "Instagram, Meta, LinkedIn, TikTok — each needs its own copy, its own image, its own time. Most weeks, nothing goes out.",
   },
 ];
-
 
 const steps = [
   {
@@ -121,7 +130,6 @@ const steps = [
     body: "Track leads, conversations, bookings, campaign performance, conversion rates, customer lifetime value, and revenue through real-time analytics and business intelligence dashboards.",
   },
 ];
-
 
 const features = [
   {
@@ -203,14 +211,16 @@ function Home() {
             </FadeIn>
             <FadeIn delay={0.1}>
               <p className="mt-8 text-body-md text-graphite max-w-xl">
-                IIEVI is the Social-First AI that captures every lead, books every appointment,
-                and follows up with every customer — automatically. Built for Global salons,
-                clinics, and service businesses.
+                IIEVI is the Social-First AI that captures every lead, books every appointment, and
+                follows up with every customer — automatically. Built for Global salons, clinics,
+                and service businesses.
               </p>
             </FadeIn>
             <FadeIn delay={0.15}>
               <div className="mt-10 flex flex-wrap gap-4">
-                <ButtonLink to="/register" variant="primary">Get Started Free</ButtonLink>
+                <ButtonLink to="/register" variant="primary">
+                  Get Started Free
+                </ButtonLink>
                 <ButtonLink to="/demo" variant="ghost">
                   <Play size={14} strokeWidth={1.5} /> Watch Demo
                 </ButtonLink>
@@ -256,7 +266,6 @@ function Home() {
               </Card>
             </FadeIn>
           </div>
-
         </div>
       </Container>
 
@@ -295,7 +304,6 @@ function Home() {
         </FadeIn>
         <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {painPoints.map((p, i) => (
-
             <FadeIn key={p.title} delay={i * 0.06}>
               <Card className="border-t-2 border-t-signal h-full">
                 <AlertTriangle size={24} className="text-signal" strokeWidth={1.5} />
@@ -308,7 +316,6 @@ function Home() {
         <FadeIn delay={0.2}>
           <p className="mt-14 font-display text-headline-md text-ink max-w-2xl">
             IIEVI handles all four. Automatically.
-
           </p>
         </FadeIn>
       </Section>
@@ -334,7 +341,9 @@ function Home() {
                   {s.n}
                 </span>
                 <div className="relative pt-4">
-                  <p className="font-mono text-mono-sm text-stone uppercase tracking-[0.14em]">Step {s.n}</p>
+                  <p className="font-mono text-mono-sm text-stone uppercase tracking-[0.14em]">
+                    Step {s.n}
+                  </p>
                   <h3 className="mt-3 font-display text-headline-md text-ink">{s.title}</h3>
                   <p className="mt-3 text-body-sm text-graphite">{s.body}</p>
                 </div>
@@ -348,7 +357,6 @@ function Home() {
 
       {/* AI MARKETING DEPARTMENT */}
 
-
       {/* OPERATING METRICS */}
       <Section inset>
         <FadeIn>
@@ -357,16 +365,30 @@ function Home() {
             {t("Know what every rupee returns.")}
           </h2>
           <p className="mt-6 max-w-2xl text-body-md text-graphite">
-            {t("One dashboard for clients reached, conversations started, AI tools spend, cost per lead, cost per conversion, in-platform chats — and the AI booking discounts that close them faster.")}
+            {t(
+              "One dashboard for clients reached, conversations started, AI tools spend, cost per lead, cost per conversion, in-platform chats — and the AI booking discounts that close them faster.",
+            )}
           </p>
         </FadeIn>
         <div className="mt-14 grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10">
-          <FadeIn delay={0.04}><Stat value="48,200" label="Clients reached / mo" /></FadeIn>
-          <FadeIn delay={0.08}><Stat value="6,140" label="Conversations started" /></FadeIn>
-          <FadeIn delay={0.12}><Stat value="₹94" label="Cost per lead" /></FadeIn>
-          <FadeIn delay={0.16}><Stat value="₹312" label="Cost per conversion" /></FadeIn>
-          <FadeIn delay={0.20}><Stat value="₹7,400" label="AI tools spend / mo" /></FadeIn>
-          <FadeIn delay={0.24}><Stat value="11,820" label="In-platform chats" /></FadeIn>
+          <FadeIn delay={0.04}>
+            <Stat value="48,200" label="Clients reached / mo" />
+          </FadeIn>
+          <FadeIn delay={0.08}>
+            <Stat value="6,140" label="Conversations started" />
+          </FadeIn>
+          <FadeIn delay={0.12}>
+            <Stat value="₹94" label="Cost per lead" />
+          </FadeIn>
+          <FadeIn delay={0.16}>
+            <Stat value="₹312" label="Cost per conversion" />
+          </FadeIn>
+          <FadeIn delay={0.2}>
+            <Stat value="₹7,400" label="AI tools spend / mo" />
+          </FadeIn>
+          <FadeIn delay={0.24}>
+            <Stat value="11,820" label="In-platform chats" />
+          </FadeIn>
         </div>
       </Section>
 
@@ -382,14 +404,13 @@ function Home() {
                 Your data stays yours. Always.
               </h2>
               <p className="mt-6 max-w-xl text-body-md text-graphite">
-                Every business runs in its own isolated tenant. Your leads, your conversations,
-                your campaign performance — never pooled, never used to train shared models,
-                never visible to anyone outside your team.
+                Every business runs in its own isolated tenant. Your leads, your conversations, your
+                campaign performance — never pooled, never used to train shared models, never
+                visible to anyone outside your team.
               </p>
               <p className="mt-4 max-w-xl text-body-md text-graphite">
                 We hold ourselves to the strictest data-isolation standard so that competing
-                businesses on IIEVI can't see — and can never benefit from — each other's
-                customers.
+                businesses on IIEVI can't see — and can never benefit from — each other's customers.
               </p>
             </FadeIn>
           </div>
@@ -397,10 +418,26 @@ function Home() {
             <FadeIn delay={0.1}>
               <Card variant="paper" className="p-0">
                 {[
-                  { icon: Database, label: "Tenant-isolated database", body: "Per-business schema, encrypted keys, no cross-reads." },
-                  { icon: Lock, label: "Encrypted at rest & in transit", body: "AES-256 + TLS 1.3 across every surface." },
-                  { icon: ShieldCheck, label: "No cross-tenant model training", body: "We never train shared models on your conversations." },
-                  { icon: MapPin, label: "Region-pinned in India", body: "Hosted in Mumbai. DPDP-compliant by design." },
+                  {
+                    icon: Database,
+                    label: "Tenant-isolated database",
+                    body: "Per-business schema, encrypted keys, no cross-reads.",
+                  },
+                  {
+                    icon: Lock,
+                    label: "Encrypted at rest & in transit",
+                    body: "AES-256 + TLS 1.3 across every surface.",
+                  },
+                  {
+                    icon: ShieldCheck,
+                    label: "No cross-tenant model training",
+                    body: "We never train shared models on your conversations.",
+                  },
+                  {
+                    icon: MapPin,
+                    label: "Region-pinned in India",
+                    body: "Hosted in Mumbai. DPDP-compliant by design.",
+                  },
                 ].map((row, i, arr) => (
                   <div
                     key={row.label}
@@ -429,20 +466,38 @@ function Home() {
             Trained on your business in 48 hours.
           </h2>
           <p className="mt-6 max-w-2xl text-body-md text-graphite">
-            A comprehensive onboarding programme that teaches IIEVI your menu, your voice,
-            your policies, and your customers — before you ever go live.
+            A comprehensive onboarding programme that teaches IIEVI your menu, your voice, your
+            policies, and your customers — before you ever go live.
           </p>
         </FadeIn>
         <div className="mt-14 grid grid-cols-1 md:grid-cols-4 gap-px bg-hairline border border-hairline">
           {[
-            { n: "01", t: "Menu & pricing", d: "Upload your full service list, packages, GST, and seasonal rates." },
-            { n: "02", t: "Voice & tone", d: "Paste 50 past chats. We learn how you greet, joke, escalate, and close." },
-            { n: "03", t: "Policies & FAQs", d: "Cancellation, refunds, deposits, escalation paths — encoded once." },
-            { n: "04", t: "Go-live review", d: "We run 100 synthetic conversations with you before flipping the switch." },
+            {
+              n: "01",
+              t: "Menu & pricing",
+              d: "Upload your full service list, packages, GST, and seasonal rates.",
+            },
+            {
+              n: "02",
+              t: "Voice & tone",
+              d: "Paste 50 past chats. We learn how you greet, joke, escalate, and close.",
+            },
+            {
+              n: "03",
+              t: "Policies & FAQs",
+              d: "Cancellation, refunds, deposits, escalation paths — encoded once.",
+            },
+            {
+              n: "04",
+              t: "Go-live review",
+              d: "We run 100 synthetic conversations with you before flipping the switch.",
+            },
           ].map((s) => (
             <div key={s.n} className="bg-neutral p-8">
               <GraduationCap size={20} className="text-signal" strokeWidth={1.5} />
-              <p className="mt-6 font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">Step {s.n}</p>
+              <p className="mt-6 font-mono text-mono-sm uppercase tracking-[0.14em] text-stone">
+                Step {s.n}
+              </p>
               <h3 className="mt-2 font-display text-headline-sm text-ink">{s.t}</h3>
               <p className="mt-3 text-body-sm text-graphite">{s.d}</p>
             </div>
@@ -454,7 +509,6 @@ function Home() {
 
       {/* FEATURES */}
       <Section>
-
         <FadeIn>
           <SectionLabel>Features</SectionLabel>
           <h2 className="mt-6 font-display text-[36px] md:text-headline-lg text-ink max-w-3xl">
@@ -467,15 +521,31 @@ function Home() {
             return (
               <FadeIn key={f.title}>
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-                  <div
-                    className={`lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}
-                  >
+                  <div className={`lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}>
                     <div className="border border-hairline bg-neutral aspect-[16/10] flex items-center justify-center">
                       <ChatMockup
                         title={f.label}
                         messages={[
-                          { from: "user", text: i === 0 ? "Need a quote for AC repair urgent" : i === 1 ? "Move my Friday slot to Saturday" : "Done with the service, thanks!", time: "12:18" },
-                          { from: "ai", text: i === 0 ? "We can be there by 6 PM today. ₹399 visit + parts. Confirm?" : i === 1 ? "Moved ✓ Saturday 4 PM with the same stylist. Reminder sent." : "Glad you loved it! 30s Google review: g.page/glow-salon ★★★★★", time: "12:18" },
+                          {
+                            from: "user",
+                            text:
+                              i === 0
+                                ? "Need a quote for AC repair urgent"
+                                : i === 1
+                                  ? "Move my Friday slot to Saturday"
+                                  : "Done with the service, thanks!",
+                            time: "12:18",
+                          },
+                          {
+                            from: "ai",
+                            text:
+                              i === 0
+                                ? "We can be there by 6 PM today. ₹399 visit + parts. Confirm?"
+                                : i === 1
+                                  ? "Moved ✓ Saturday 4 PM with the same stylist. Reminder sent."
+                                  : "Glad you loved it! 30s Google review: g.page/glow-salon ★★★★★",
+                            time: "12:18",
+                          },
                         ]}
                         className="m-6 w-[88%]"
                       />
@@ -488,9 +558,17 @@ function Home() {
                       {f.bullets.map((b, j) => (
                         <li key={b} className="flex items-start gap-3 text-body-sm text-graphite">
                           {j === 0 ? (
-                            <ArrowRight size={16} className="text-signal mt-1 shrink-0" strokeWidth={1.5} />
+                            <ArrowRight
+                              size={16}
+                              className="text-signal mt-1 shrink-0"
+                              strokeWidth={1.5}
+                            />
                           ) : (
-                            <Minus size={16} className="text-stone mt-1 shrink-0" strokeWidth={1.5} />
+                            <Minus
+                              size={16}
+                              className="text-stone mt-1 shrink-0"
+                              strokeWidth={1.5}
+                            />
                           )}
                           <span>{b}</span>
                         </li>
@@ -521,10 +599,18 @@ function Home() {
           </h2>
         </FadeIn>
         <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-8">
-          <FadeIn delay={0.05}><Stat value="3s" label="Average AI response" /></FadeIn>
-          <FadeIn delay={0.1}><Stat value="₹1.38L" label="Avg. monthly recovered revenue" /></FadeIn>
-          <FadeIn delay={0.15}><Stat value="60%" label="Leads booked automatically" /></FadeIn>
-          <FadeIn delay={0.2}><Stat value="4.7" label="Avg. Google rating after 90 days" /></FadeIn>
+          <FadeIn delay={0.05}>
+            <Stat value="3s" label="Average AI response" />
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <Stat value="₹1.38L" label="Avg. monthly recovered revenue" />
+          </FadeIn>
+          <FadeIn delay={0.15}>
+            <Stat value="60%" label="Leads booked automatically" />
+          </FadeIn>
+          <FadeIn delay={0.2}>
+            <Stat value="4.7" label="Avg. Google rating after 90 days" />
+          </FadeIn>
         </div>
       </Section>
 
@@ -541,7 +627,9 @@ function Home() {
         <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
             <FadeIn key={t.name} delay={i * 0.06}>
-              <Card className={`h-full flex flex-col ${t.featured ? "border-2 border-signal" : ""}`}>
+              <Card
+                className={`h-full flex flex-col ${t.featured ? "border-2 border-signal" : ""}`}
+              >
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((s) => (
                     <Star key={s} size={14} className="fill-ink text-ink" />
@@ -576,8 +664,6 @@ function Home() {
 
       <Rule />
 
-
-
       <CTASection />
     </>
   );
@@ -586,7 +672,15 @@ function Home() {
 // silence unused import warning for Button — used in mobile flows referenced elsewhere
 void Button;
 
-function StepBlock({ step, index, onInView }: { step: PlaybookStep; index: number; onInView: () => void }) {
+function StepBlock({
+  step,
+  index,
+  onInView,
+}: {
+  step: PlaybookStep;
+  index: number;
+  onInView: () => void;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
   const { t } = useTranslation();
@@ -598,13 +692,19 @@ function StepBlock({ step, index, onInView }: { step: PlaybookStep; index: numbe
   }, [inView, onInView]);
 
   return (
-    <div ref={ref} className="relative transition-opacity duration-300" style={{ opacity: inView ? 1 : 0.4 }}>
+    <div
+      ref={ref}
+      className="relative transition-opacity duration-300"
+      style={{ opacity: inView ? 1 : 0.4 }}
+    >
       <div className="lg:hidden mb-4">
         <span className="text-display-xl font-display text-stone absolute -top-12 -left-4 pointer-events-none select-none z-[-1] opacity-20">
           {step.stepNumber}
         </span>
       </div>
-      <SectionLabel className="mb-4">{step.stepNumber} — {t(step.heading)}</SectionLabel>
+      <SectionLabel className="mb-4">
+        {step.stepNumber} — {t(step.heading)}
+      </SectionLabel>
       <h3 className="font-display text-headline-md text-ink mb-4">{t(step.heading)}</h3>
       <p className="text-body-md text-graphite mb-8">{t(step.description)}</p>
 
@@ -613,7 +713,7 @@ function StepBlock({ step, index, onInView }: { step: PlaybookStep; index: numbe
           {t(step.highlightsLabel)}
         </p>
         <ul className="space-y-3">
-          {step.highlights.map(h => (
+          {step.highlights.map((h) => (
             <li key={h} className="flex items-start gap-3 text-body-sm text-ink">
               <span className="w-1.5 h-1.5 mt-2 bg-signal shrink-0" />
               <span>{t(h)}</span>

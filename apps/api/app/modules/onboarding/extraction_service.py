@@ -1,4 +1,3 @@
-"""Claude Sonnet 4 structured extraction for onboarding answers.
 """Gemini 2.5 Flash structured extraction for onboarding answers.
 
 Contract with the model (enforced by prompt AND by Pydantic validation):
@@ -97,7 +96,6 @@ async def extract(
     raw = await ai.complete(
         system=system,
         user_message=user_answer,
-        model=ai.SONNET_MODEL,
         model=ai.FLASH_MODEL,
         max_tokens=1024,
         trace_name=f"onboarding-extract-{kind}",
