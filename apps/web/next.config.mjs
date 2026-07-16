@@ -1,5 +1,11 @@
+import bundleAnalyzer from "@next/bundle-analyzer";
 import withPWAInit from "@ducanh2912/next-pwa";
 import { withSentryConfig } from "@sentry/nextjs";
+
+// Run `ANALYZE=true pnpm build` after major dependency changes to inspect bundle
+// size. Performance budget (Step 13): the main entry JS should stay under ~250KB
+// (warn) and must stay under 500KB (investigate) — tracked via this analyzer.
+const withAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === "true" });
 
 // App-shell precache + network-first runtime caching (the default cache treats
 // cross-origin API GETs as NetworkFirst). Disabled in dev so HMR isn't cached.
@@ -41,7 +47,7 @@ const nextConfig = {
   },
 };
 
-const withPWAConfig = withPWA(nextConfig);
+const withPWAConfig = withAnalyzer(withPWA(nextConfig));
 
 // Source-map upload needs SENTRY_AUTH_TOKEN (CI/production only); local builds
 // stay fast and offline without it.

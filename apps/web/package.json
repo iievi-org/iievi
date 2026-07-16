@@ -11,6 +11,9 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@ducanh2912/next-pwa": "^10.2.9",
     "@hookform/resolvers": "^5.4.0",
     "@iievi/api-client": "workspace:*",
@@ -19,6 +22,7 @@
     "@iievi/validators": "workspace:*",
     "@sentry/nextjs": "^8.40.0",
     "@tanstack/react-query": "^5.62.0",
+    "@tanstack/react-virtual": "^3.14.6",
     "clsx": "^2.1.1",
     "framer-motion": "^12.42.2",
     "jwt-decode": "^4.0.0",
@@ -32,6 +36,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.2.10",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.6.1",

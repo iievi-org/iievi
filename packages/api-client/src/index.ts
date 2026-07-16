@@ -7,11 +7,12 @@
  */
 
 import type {
-  AnalyticsSummary,
+  AdminLogsResponse,
   Capabilities,
   ConversationHistory,
   CredentialsResponse,
   DeepHealthResponse,
+  FeatureFlag,
   GeneratePostResponse,
   HealthResponse,
   Lead,
@@ -20,6 +21,8 @@ import type {
   LeadStatus,
   NotificationListResponse,
   NotificationPreferences,
+  OnboardingTurnResponse,
+  Plan,
   Platform,
   PostProgress,
   PostStatus,
@@ -74,6 +77,39 @@ export interface LeadPatchBody {
 export type ProfileUpdateBody = Record<string, unknown>;
 
 export type NotificationPreferencesUpdate = Partial<NotificationPreferences>;
+
+/** POST /analytics/onboarding-event — onboarding funnel telemetry. */
+export interface OnboardingEventBody {
+  session_token: string;
+  stage: string;
+  event_type: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface AdminLogsParams {
+  tenant_id?: string;
+  from_date?: string;
+  to_date?: string;
+  level?: string;
+  limit?: number;
+}
+
+export interface FlagCreateBody {
+  flag_key: string;
+  description?: string;
+  enabled_globally?: boolean;
+  minimum_plan?: Plan | null;
+}
+
+export interface FlagPatchBody {
+  description?: string | null;
+  enabled_globally?: boolean | null;
+  minimum_plan?: Plan | null;
+  add_enabled_tenants?: string[];
+  remove_enabled_tenants?: string[];
+  add_disabled_tenants?: string[];
+  remove_disabled_tenants?: string[];
+}
 
 // ---------------------------------------------------------------------------
 // Query-string helper
@@ -201,9 +237,32 @@ export function createApiClient(options: ApiClientOptions) {
         }),
     },
 
-    analytics: {
-      summary: (params?: { period?: string }): Promise<AnalyticsSummary> =>
-        req<AnalyticsSummary>(`/api/v1/analytics/summary${qs(params)}`),
+    onboarding: {
+      message: (message: string): Promise<OnboardingTurnResponse> =>
+        req<OnboardingTurnResponse>("/api/v1/onboarding/message", {
+          method: "POST",
+          ...body({ message }),
+        }),
+      /** Onboarding funnel telemetry (fire-and-forget). */
+      trackEvent: (payload: OnboardingEventBody): Promise<void> =>
+        req<void>("/api/v1/analytics/onboarding-event", { method: "POST", ...body(payload) }),
+    },
+
+    admin: {
+      logs: (params?: AdminLogsParams): Promise<AdminLogsResponse> =>
+        req<AdminLogsResponse>(`/api/v1/admin/logs${qs(params)}`),
+      flags: {
+        list: (): Promise<FeatureFlag[]> => req<FeatureFlag[]>("/api/v1/admin/feature-flags"),
+        create: (payload: FlagCreateBody): Promise<FeatureFlag> =>
+          req<FeatureFlag>("/api/v1/admin/feature-flags", { method: "POST", ...body(payload) }),
+        patch: (key: string, payload: FlagPatchBody): Promise<FeatureFlag> =>
+          req<FeatureFlag>(`/api/v1/admin/feature-flags/${key}`, {
+            method: "PATCH",
+            ...body(payload),
+          }),
+        remove: (key: string): Promise<void> =>
+          req<void>(`/api/v1/admin/feature-flags/${key}`, { method: "DELETE" }),
+      },
     },
   };
 }
